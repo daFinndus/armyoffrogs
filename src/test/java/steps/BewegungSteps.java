@@ -19,37 +19,39 @@ public class BewegungSteps {
 
     Color player;
 
-    @Angenommen("das Spiel startet mit {int} Spielern")
-    public void das_Spiel_ist_mit_Spielern_gestartet(Integer spieler) {
-        logic = new Gamelogic();
-        logic.startGame(spieler);
+    @Angenommen("der erste Spieler ist am Zug")
+    public void der_erste_Spieler_ist_am_Zug() {
+        int amount_of_players = 2;
 
         gameround = new Gameround();
-        gameround.round = 0;
-    }
+        logic = new Gamelogic();
+        // For example:
 
-    @Angenommen("der {word} Spieler ist am Zug")
-    public void der_Spieler_ist_am_Zug(String position) {
+        logic.startGame(amount_of_players);
+
+
         Color[] players = logic.players();
 
-        System.out.println(players);
+        // Debugging:
+        for (int x = 0; x < players.length; x++) {
+            System.out.println(players[x]);
+            System.out.println("Printed player");
+        }
+
+        if (players.length == 0) {
+            throw new io.cucumber.java.PendingException();
+        }
     }
 
     @Wenn("er einen Frosch bewegen möchte")
     public void er_einen_Frosch_bewegen_moechte() {
-
+        player = gameround.getCurrentPlayer();
+        assertThat(player).isNotNull();
     }
 
     @Dann("muss der Frosch seine Teamfarbe haben")
-    public boolean muss_der_Frosch_seine_Teamfarbe() {
-        Color teamFarbe = logic.players()[0];
-        List<Color> froschFarbe = logic.getFrogsInHand(teamFarbe);
-
-        for (int x = 0; x < froschFarbe.size(); x++) {
-            if (froschFarbe.get(x) == teamFarbe) {
-                return true;
-            }
-        }
-        return false;
+    public boolean muss_der_Frosch_seine_Teamfarbe_haben() {
+        List<Color> frogsInHand = logic.getFrogsInHand(player);
+        return frogsInHand.contains(player);
     }
 }

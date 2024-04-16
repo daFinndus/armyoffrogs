@@ -4,10 +4,13 @@ import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Game;
 import de.fhkiel.tsw.armyoffrogs.Position;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public class Gamelogic implements Game {
+    private Color[] players;
+
     @Override
     public boolean newGame(int numberOfPlayers) {
         return false;
@@ -15,7 +18,7 @@ public class Gamelogic implements Game {
 
     @Override
     public Color[] players() {
-        return new Color[0];
+        return players;
     }
 
     @Override
@@ -69,6 +72,9 @@ public class Gamelogic implements Game {
         for (int i = 0; i < (2 * spieler); ++i) {
             bag.takeFrog();
         }
+
+        players = Arrays.copyOfRange(Color.values(), 0, spieler);
+
     }
 
     public void takeFrogFromBag() {
