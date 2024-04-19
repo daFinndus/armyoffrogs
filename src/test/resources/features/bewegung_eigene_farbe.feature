@@ -3,5 +3,5 @@ Funktionalität: (AoF-L-001) Das Plugin muss fähig sein, Spielern lediglich die
 
   Szenario: Spieler möchte eine Bewegung ausführen
     Angenommen der erste Spieler ist am Zug
-    Wenn er einen Frosch bewegen möchte
+    Wenn der Spieler seinen Frosch bewegen möchte
     Dann muss der Frosch seine Teamfarbe haben
