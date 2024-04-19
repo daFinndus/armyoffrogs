@@ -6,3 +6,4 @@ Funktionalität: (AoF-L-001) Das Plugin muss fähig sein, Spielern lediglich die
     Und der erste Spieler ist am Zug
     Wenn er einen Frosch bewegen möchte
     Dann muss der Frosch seine Teamfarbe haben
+
