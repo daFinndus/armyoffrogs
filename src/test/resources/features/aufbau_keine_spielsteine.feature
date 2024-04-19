@@ -1,5 +1,5 @@
 # language: de
-Funktionalität: Das Plugin muss verhindern, dass die Spielsteine, die nicht genutzt werden, den Beutel füllen.
+Funktionalität: Das Plugin muss verhindern, dass die Spielsteine, die nicht genutzt werden, den Beutel nicht befüllen.
 
   Szenario: Der Beutel ist leer und das Spiel wird vorbereitet
     Angenommen das Spiel wird vorbereitet
