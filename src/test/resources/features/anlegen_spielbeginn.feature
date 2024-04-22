@@ -2,8 +2,8 @@
 Funktionalität: Das System muss sicherstellen, dass der Startspieler das Spiel eröffnet, indem er einen beliebigen
   Stein aus seinem Vorrat auf das Spielfeld legt.
 
-  Szenario: Spieler möchte einen stein legen um ds Spiel zu beginnen
-    Angenommen die Spielerfarben wurden entschieden
-    Und das Spiel beginnt
+  Szenario: Der Startspieler möchte den ersten Stein legen um das Spiel zu beginnen
+    Angenommen das Spiel wird gestartet
+    Und die Spielerfarben wurden vergeben
     Wenn der Startspieler festgelegt wurde
-    Dann muss der Startspieler einen beliebigen Stein aus seinem Vorrat legen
+    Dann muss dieser einen beliebigen Stein aus seinem Vorrat legen

@@ -5,5 +5,5 @@ Funktionalität: Das Plugin muss sicherstellen, dass kein Spielstein so bewegt w
   Szenario: Spieler möchte eine Bewegung machen
     Angenommen der erste Spieler ist am Zug
     Wenn er einen Frosch bewegen möchte
-    Dann darf er keinen Frosch so bewegen, dass er eine Kette mit drei oder mehr Einzelverbindungen hinterlassen
+    Dann darf er keinen Frosch so bewegen, dass er eine Kette mit drei oder mehr Einzelverbindungen hinterlassen würde
     Und er darf kein offenes Ende hinterlassen

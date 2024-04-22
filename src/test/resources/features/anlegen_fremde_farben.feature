@@ -1,6 +1,6 @@
 # language: de
-  Funktionalität: Das System muss ermöglichen, dass Spielsteine, die nicht der Teamfarbe gleichen, beliebig ans Feld
-    angelegt werden dürfen.
+Funktionalität: Das System muss ermöglichen, dass Spielsteine, die nicht der Teamfarbe gleichen, beliebig ans Feld
+  angelegt werden dürfen.
 
   Szenario: Der Spieler möchte einen Spielstein anlegen, der nicht die eigene Teamfarbe hat
     Angenommen das Spiel startet mit 2 Spielern

@@ -1,5 +1,5 @@
 # language: de
-Funktionalität: Das Plugin muss verbieten, dass eine Bewegung eines Spielsteins auf der Ausgangsposition
+Funktionalität: Das Plugin muss verbieten, dass die Bewegung eines Spielsteins auf der Ausgangsposition
   beendet wird.
 
   Szenario: Spieler möchte eine Bewegung ausführen
