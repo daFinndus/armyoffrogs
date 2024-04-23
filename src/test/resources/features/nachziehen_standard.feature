@@ -1,0 +1,9 @@
+# language: de
+Funktionalität: Das System muss sicherstellen, dass der Spieler einen zufällig gezogenen Spielstein aus dem Beutel
+  seinem Vorrat hinzufügt, solange der Spieler nicht bereits zwei Spielsteine hat.
+
+  Szenario: Spieler möchte einen Spielstein aus dem Beutel zu seinem Vorrat hinzufügen.
+    Angenommen Das Spiel hat mit 2 Spielern begonnen.
+    Und der erste Spieler ist am Zug
+    Wenn er einen neuen Spielstein ziehen will
+    Dann muss die Anzahl der sich im Vorrat befindenden Spiel 1 betragen.

@@ -7,11 +7,16 @@ Funktionalität: Das Plugin muss sicherstellen, dass der Spieler gewonnen hat, d
     Wenn der Spieler keine weiteren Steine auf dem Spielfeld hat
     Dann hat der Spieler gewonnen
 
-"""
+
   Szenariogrundriss: Der Spieler hat <Frösche> Frösche in einer Kette
     Angenommen das Spiel ist gestartet
     Und der Spieler hat <Frösche> Frösche in einer Kette
     Wenn der Spieler mindestens 7 Frösch in einer Kette hat
     Und alle Frösche derselben Farbe in einer Kette auf dem Spielfeld verbunden sind
     Dann hat der Spieler gewonnen
-"""
+
+Beispiele:
+    |Frösche|
+    | 8     |
+    | 4     |
+    | 10    |
