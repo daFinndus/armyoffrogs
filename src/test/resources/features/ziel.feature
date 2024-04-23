@@ -15,8 +15,8 @@ Funktionalität: Das Plugin muss sicherstellen, dass der Spieler gewonnen hat, d
     Und alle Frösche derselben Farbe in einer Kette auf dem Spielfeld verbunden sind
     Dann hat der Spieler gewonnen
 
-Beispiele:
-    |Frösche|
-    | 8     |
-    | 4     |
-    | 10    |
+    Beispiele:
+      | Frösche |
+      | 8       |
+      | 4       |
+      | 10      |
