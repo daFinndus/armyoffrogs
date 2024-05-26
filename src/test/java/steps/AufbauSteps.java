@@ -92,4 +92,25 @@ public class AufbauSteps {
             assertThat(Arrays.asList(colors)).contains(colorInstance);
         }
     }
+
+    @Wenn("die Spielerauswahl getroffen wurde")
+    public void die_spielerauswahl_getroffen_wurde() {
+        System.out.println("Die Spielerauswahl wurde getroffen..");
+    }
+
+    @Wenn("nicht zwei unterschreitet")
+    public void nicht_zwei_unterschreitet() {
+        assertThat(numberOfPlayers).isGreaterThanOrEqualTo(2);
+    }
+
+    @Wenn("nicht vier überschreitet")
+    public void nicht_vier_überschreitet() {
+        assertThat(numberOfPlayers).isLessThanOrEqualTo(4);
+    }
+
+    @Dann("wird das Spiel mit {int} Spielern gestartet")
+    public void wird_das_spiel_mit_spielern_gestartet(Integer anzahl) {
+        assertThat(numberOfPlayers).isEqualTo(anzahl);
+        System.out.println("Das Spiel wird mit " + anzahl + " Spielern gestartet..");
+    }
 }
