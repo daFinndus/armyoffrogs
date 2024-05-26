@@ -63,6 +63,23 @@ public class AufbauSteps {
         container.logic.startGame(numberOfPlayers);
     }
 
+    @Wenn("die Spielerauswahl getroffen wurde")
+    public void die_spielerauswahl_getroffen_wurde() {
+        assertThat(numberOfPlayers).isGreaterThanOrEqualTo(2);
+        assertThat(numberOfPlayers).isLessThanOrEqualTo(4);
+        System.out.println("Die Spielerauswahl wurde getroffen..");
+    }
+
+    @Wenn("nicht zwei unterschreitet")
+    public void nicht_zwei_unterschreitet() {
+        assertThat(numberOfPlayers).isGreaterThanOrEqualTo(2);
+    }
+
+    @Wenn("nicht vier überschreitet")
+    public void nicht_vier_überschreitet() {
+        assertThat(numberOfPlayers).isLessThanOrEqualTo(4);
+    }
+
     @Dann("mit Fröschen der Farbe {word}")
     public void mit_fröschen_der_farbe(String color) {
         List<Frog> frogs = bag.getFrogList();
@@ -110,8 +127,16 @@ public class AufbauSteps {
         }
     }
 
+
     @Dann("muss jeder Spieler zwei Steine aus dem Beutel in ihren Vorrat bekommen")
     public void muss_jeder_spieler_zwei_steine_aus_dem_beutel_in_ihren_vorrat_bekommen() {
         throw new io.cucumber.java.PendingException();
+    }
+
+
+    @Dann("wird das Spiel mit {int} Spielern gestartet")
+    public void wird_das_spiel_mit_spielern_gestartet(Integer anzahl) {
+        assertThat(numberOfPlayers).isEqualTo(anzahl);
+        System.out.println("Das Spiel wird mit " + anzahl + " Spielern gestartet..");
     }
 }
