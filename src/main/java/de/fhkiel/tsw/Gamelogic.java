@@ -9,7 +9,7 @@ import java.util.*;
 public class Gamelogic implements Game {
 
     private Color[] players;
-    private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
+    private Map<Color, Frog> playerFrogs = new HashMap<>();
 
     public Bag bag = new Bag();
 
@@ -41,10 +41,22 @@ public class Gamelogic implements Game {
         return null;
     }
 
+    public void addFrogToHand(Color spieler, Frog frog) {
+        playerFrogs.put(spieler, frog);
+    }
+
+    // Das funktioniert noch nicht ganz
+    public List<Frog> getFrogsOfPlayer(Color spieler) {
+        List<Frog> frogs = new ArrayList<>();
+        frogs.add(playerFrogs.get(spieler));
+        return frogs;
+    }
+
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
         return null;
     }
+
 
     @Override
     public Set<Position> getBoard() {
@@ -87,14 +99,18 @@ public class Gamelogic implements Game {
         for (int i = 0; i < players.length; i++) {
             for (int j = 0; j < 10; j++) {
                 bag.putFrog(new Frog(players[i], null));
-
             }
         }
 
         // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
-        for (int i = 0; i < (2 * spieler); i++) {
-            bag.takeFrog();
+        for (int i = 0; i < spieler; i++) {
+            for (int j = 0; j < 2; j++) {
+                Frog frog = bag.takeFrog();
+                addFrogToHand(players[i], frog);
+                System.out.println("Spieler " + players[i] + " bekommt Frosch " + frog.getColor() + " hinzugefügt.");
+            }
         }
+
 
         players = Arrays.copyOfRange(Color.values(), 0, spieler);
 

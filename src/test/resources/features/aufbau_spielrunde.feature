@@ -4,9 +4,9 @@ Funktionalität: Das Plugin muss sicherstellen, dass die Spieler zu Spielbeginn,
 
   Szenariogrundriss: Die Spieler bekommen ihre ersten zwei Steine zu Spielbeginn aus dem Beutel
     Angenommen Das Spiel ist initialisiert
-    Und das Spiel hat <Spieler> Spieler
+    Und es nehmen <Spieler> Spieler teil
     Wenn die Spieler ihre ersten zwei Steine erhalten
-    Dann muss jeder Spieler zwei zufällige Steine aus dem Beutel in ihren Vorrat bekommen
+    Dann muss jeder Spieler zwei Steine aus dem Beutel in ihren Vorrat bekommen
     Und der Beutel enthält jetzt <Anzahl> Steine weniger
 
     Beispiele:

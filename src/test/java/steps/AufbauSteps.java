@@ -40,6 +40,12 @@ public class AufbauSteps {
         }
     }
 
+    // Potentiell das hier umschreiben in was cooleres
+    @Angenommen("Das Spiel ist initialisiert")
+    public void das_spiel_ist_initialisiert() {
+        System.out.println("Das Spiel ist initialisiert..");
+    }
+
     @Angenommen("es nehmen {int} Spieler teil")
     public void es_nehmen_spieler_teil(Integer anzahl) {
         numberOfPlayers = anzahl;
@@ -49,6 +55,11 @@ public class AufbauSteps {
 
     @Wenn("der Beutel befüllt wird")
     public void der_beutel_befüllt_wird() {
+        container.logic.startGame(numberOfPlayers);
+    }
+
+    @Wenn("die Spieler ihre ersten zwei Steine erhalten")
+    public void die_spieler_ihre_ersten_zwei_steine_erhalten() {
         container.logic.startGame(numberOfPlayers);
     }
 
@@ -97,5 +108,10 @@ public class AufbauSteps {
 
             assertThat(Arrays.asList(colors)).contains(colorInstance);
         }
+    }
+
+    @Dann("muss jeder Spieler zwei Steine aus dem Beutel in ihren Vorrat bekommen")
+    public void muss_jeder_spieler_zwei_steine_aus_dem_beutel_in_ihren_vorrat_bekommen() {
+        throw new io.cucumber.java.PendingException();
     }
 }
