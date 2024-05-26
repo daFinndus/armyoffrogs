@@ -1,7 +1,8 @@
 package de.fhkiel.tsw;
 
-import de.fhkiel.tsw.armyoffrogs.Color;
+
 import de.fhkiel.tsw.armyoffrogs.Game;
+import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Position;
 
 import java.util.Arrays;
@@ -95,5 +96,9 @@ public class Gamelogic implements Game {
 
     public void takeFrogFromBag() {
         bag.takeFrog();
+    }
+
+    public void putFrogIntoBag() {
+        bag.putFrog();
     }
 }

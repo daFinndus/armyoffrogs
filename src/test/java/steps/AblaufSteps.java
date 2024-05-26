@@ -1,9 +1,10 @@
 package steps;
 
 import de.fhkiel.tsw.armyoffrogs.Color;
-import io.cucumber.java.de.Angenommen;
 import steps.container.LogicContainer;
 
+import io.cucumber.java.de.Angenommen;
+import io.cucumber.java.de.Und;
 import io.cucumber.java.de.Wenn;
 import io.cucumber.java.de.Dann;
 
@@ -36,7 +37,7 @@ public class AblaufSteps {
         }
     }
 
-    @Angenommen("es wurde mit {int} Spielern gestartet")
+    @Und("es wurde mit {int} Spielern gestartet")
     public void es_wurde_mit_spielern_gestartet(int anzahl) {
         container.logic.newGame(anzahl);
     }
