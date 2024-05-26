@@ -11,7 +11,7 @@ public class Gamelogic implements Game {
     private Color[] players;
     private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
 
-    Boolean gameRunning = false;
+    public Bag bag = new Bag();
 
     @Override
     public boolean newGame(int spieler) {
@@ -23,7 +23,7 @@ public class Gamelogic implements Game {
             Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
             players = Arrays.copyOfRange(colorOrder, 0, spieler);
 
-            gameRunning = true;
+            bag.setGameRunning(true);
             return true;
         } else {
             players = new Color[0];
@@ -75,8 +75,6 @@ public class Gamelogic implements Game {
     public boolean load(String filename) {
         return false;
     }
-
-    public Bag bag = new Bag();
 
     @Override
     public int frogsInBag() {

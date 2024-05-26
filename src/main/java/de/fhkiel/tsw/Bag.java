@@ -9,16 +9,23 @@ public class Bag {
     Random random = new Random();
     private List<Frog> frogs;
 
+    boolean gameRunning = false;
+
+
     public Bag() {
         this.frogs = new ArrayList<>();
     }
 
+    public void setGameRunning(boolean gameRunning) {
+        this.gameRunning = gameRunning;
+    }
+
     // Returns the number of frogs in the bag
     public int getNumberOfFrogs() {
-        if (frogs.size() == 0) {
-            return 40;
-        } else {
+        if (gameRunning) {
             return frogs.size();
+        } else {
+            return 40;
         }
     }
 
