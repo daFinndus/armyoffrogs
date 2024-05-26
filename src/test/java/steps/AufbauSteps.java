@@ -55,7 +55,10 @@ public class AufbauSteps {
     @Dann("mit Fröschen der Farbe {word}")
     public void mit_fröschen_der_farbe(String color) {
         List<Frog> frogs = bag.getFrogList();
-        Color[] colors = new Color[frogs.size() / 10];
+        Color[] colors = new Color[container.logic.players().length];
+
+        System.out.println("Frog size: " + frogs.size());
+        System.out.println("Color size: " + colors.length);
 
         if (!color.equals("null")) {
             for (int i = 0; i < frogs.size(); i++) {
@@ -71,8 +74,11 @@ public class AufbauSteps {
                 }
             }
 
+            System.out.println("Farben: " + Arrays.toString(colors) + " (Erwartet: " + color + ")");
+
 
             Color colorInstance = null;
+
             switch (color) {
                 case "Rot":
                     colorInstance = Color.Red;
