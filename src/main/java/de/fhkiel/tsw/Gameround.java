@@ -36,16 +36,16 @@ public class Gameround {
         String derzeitigerSpieler;
 
         switch (currentPlayer) {
-            case Color.Green:
+            case Green:
                 derzeitigerSpieler = "Gruen";
                 break;
-            case Color.Red:
+            case Red:
                 derzeitigerSpieler = "Rot";
                 break;
-            case Color.Blue:
+            case Blue:
                 derzeitigerSpieler = "Blau";
                 break;
-            case Color.White:
+            case White:
                 derzeitigerSpieler = "Weiss";
                 break;
             default:
