@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Gamelogic implements Game {
+
     private Color[] players;
+    private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
 
     @Override
     public boolean newGame(int spieler) {
@@ -40,7 +42,7 @@ public class Gamelogic implements Game {
 
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
-        return null;
+        return playerFrogs.getOrDefault(spieler, new ArrayList<>());
     }
 
     @Override

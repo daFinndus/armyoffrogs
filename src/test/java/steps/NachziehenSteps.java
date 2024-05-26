@@ -41,7 +41,7 @@ public class NachziehenSteps {
     }
 
     @Dann("muss die Anzahl der sich im Vorrat befindenden Spielsteine 1 betragen.")
-    public void muss_die_anzahl_der_sich_im_vorrat_befindenden_spielsteine_betragen() {
+    public void muss_die_anzahl_der_sich_im_vorrat_befindenden_spielsteine_1_betragen() {
         int frogsInHandBefore = container.logic.getFrogsInHand(container.logic.players()[0]).size();
         if (frogsInHandBefore < 2) {
             Frog frog = container.logic.takeFrogFromBag();
