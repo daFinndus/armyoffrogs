@@ -3,15 +3,13 @@ Funktionalität: Das Plugin muss verhindern, dass die Spielsteine, die nicht gen
 
   Szenario: Der Beutel ist leer und das Spiel wird vorbereitet
     Angenommen das Spiel wird vorbereitet
-    Und es spielen 2 Spieler
-    Und die Spielerfarben wurden vergeben
+    Und es nehmen 2 Spieler teil
     Wenn der Beutel befüllt wird
     Dann darf er das nur mit den Spielsteinen der Spielerfarben tun
 
   Szenariogrundriss: Der Beutel ist leer und das Spiel wird vorbereitet
     Angenommen das Spiel wird vorbereitet
-    Und es spielen <Spieler> Spieler
-    Und die Spielerfarben <Farben> wurden vergeben
+    Und es nehmen <Spieler> Spieler teil
     Wenn der Beutel befüllt wird
     Dann darf er das nur mit den Spielsteinen der Farbe <Farben> tun
 

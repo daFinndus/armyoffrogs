@@ -1,6 +1,5 @@
 package de.fhkiel.tsw;
 
-
 import de.fhkiel.tsw.armyoffrogs.Game;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Position;
@@ -21,9 +20,7 @@ public class Gamelogic implements Game {
             // Fill the players array with the colors of the players
             Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
             players = Arrays.copyOfRange(colorOrder, 0, spieler);
-
-            // Start the game
-            startGame(spieler);
+            
             return true;
         } else {
             players = new Color[0];
@@ -76,20 +73,26 @@ public class Gamelogic implements Game {
         return false;
     }
 
-    private Bag bag = new Bag(40);
+    public Bag bag = new Bag();
 
     @Override
     public int frogsInBag() {
         return bag.getNumberOfFrogs();
     }
 
+    // Der Beutel wird befüllt mit Fröschen der jeweiligen Spielerfarben
     public void startGame(int spieler) {
-        bag = new Bag(10 * spieler);
+        System.out.println("Spieler liegen bei: " + spieler);
+        System.out.println("Playersize liegt bei: " + players.length);
 
-        for (int i = 0; i < (2 * spieler); ++i) {
-            bag.takeFrog();
+        for (int i = 0; i < players.length; i++) {
+            for (int j = 0; j < 10; j++) {
+                bag.putFrog(new Frog(players[i], null));
+
+            }
         }
 
+        System.out.println(getClass().getName() + " - " + "Frösche im Beutel liegen bei " + bag.getNumberOfFrogs());
         players = Arrays.copyOfRange(Color.values(), 0, spieler);
 
     }
@@ -98,7 +101,9 @@ public class Gamelogic implements Game {
         bag.takeFrog();
     }
 
-    public void putFrogIntoBag() {
-        bag.putFrog();
+    public void putFrogIntoBag(Color color) {
+        Frog frog = new Frog(color, null);
+
+        bag.putFrog(frog);
     }
 }
