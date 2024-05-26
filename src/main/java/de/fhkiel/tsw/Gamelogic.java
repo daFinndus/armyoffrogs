@@ -20,7 +20,7 @@ public class Gamelogic implements Game {
             // Fill the players array with the colors of the players
             Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
             players = Arrays.copyOfRange(colorOrder, 0, spieler);
-            
+
             return true;
         } else {
             players = new Color[0];
@@ -97,8 +97,9 @@ public class Gamelogic implements Game {
 
     }
 
-    public void takeFrogFromBag() {
-        bag.takeFrog();
+    public Frog takeFrogFromBag() {
+
+        return bag.takeFrog();
     }
 
     public void putFrogIntoBag(Color color) {

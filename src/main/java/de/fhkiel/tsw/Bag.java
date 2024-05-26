@@ -18,10 +18,13 @@ public class Bag {
         return frogs.size();
     }
 
-    // Removes a frog from the bag
+    // Removes a frog from the bag and returns it
     public Frog takeFrog() {
         if (!frogs.isEmpty()) {
-            return frogs.remove(random.nextInt(frogs.size()));
+            Frog frog = frogs.get(random.nextInt(frogs.size()));
+            frogs.remove(random.nextInt(frogs.size()));
+
+            return frog;
         }
         return null;
     }

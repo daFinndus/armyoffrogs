@@ -1,7 +1,9 @@
 package steps;
 
+
 import de.fhkiel.tsw.armyoffrogs.Color;
 import steps.container.LogicContainer;
+import de.fhkiel.tsw.Frog;
 
 import io.cucumber.java.de.Angenommen;
 import io.cucumber.java.de.Und;
@@ -40,8 +42,8 @@ public class NachziehenSteps {
     public void muss_die_anzahl_der_sich_im_vorrat_befindenden_spielsteine_1_betragen() {
         int frogsInHandBefore = container.logic.getFrogsInHand(container.logic.players()[0]).size();
         if (frogsInHandBefore < 2) {
-            Color frog = container.logic.takeFrogFromBag();
-            container.logic.selectedFrogInHand(container.logic.players()[0], frog);
+            Frog frog = container.logic.takeFrogFromBag();
+            container.logic.selectedFrogInHand(container.logic.players()[0], frog.getColor());
             int frogsInHandAfter = container.logic.getFrogsInHand(container.logic.players()[0]).size();
             assertThat(frogsInHandAfter).isEqualTo(frogsInHandBefore + 1);
         } else {
