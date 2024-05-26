@@ -82,8 +82,6 @@ public class Gamelogic implements Game {
 
     // Der Beutel wird befüllt mit Fröschen der jeweiligen Spielerfarben
     public void startGame(int spieler) {
-        System.out.println("Spieler liegen bei: " + spieler);
-        System.out.println("Playersize liegt bei: " + players.length);
 
         for (int i = 0; i < players.length; i++) {
             for (int j = 0; j < 10; j++) {
@@ -92,7 +90,6 @@ public class Gamelogic implements Game {
             }
         }
 
-        System.out.println(getClass().getName() + " - " + "Frösche im Beutel liegen bei " + bag.getNumberOfFrogs());
         players = Arrays.copyOfRange(Color.values(), 0, spieler);
 
     }

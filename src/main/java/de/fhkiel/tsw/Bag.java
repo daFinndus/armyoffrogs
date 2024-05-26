@@ -18,6 +18,10 @@ public class Bag {
         return frogs.size();
     }
 
+    public List<Frog> getFrogList() {
+        return frogs;
+    }
+
     // Removes a frog from the bag and returns it
     public Frog takeFrog() {
         if (!frogs.isEmpty()) {

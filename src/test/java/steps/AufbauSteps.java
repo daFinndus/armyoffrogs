@@ -6,9 +6,15 @@ import io.cucumber.java.de.Wenn;
 import io.cucumber.java.de.Angenommen;
 
 import de.fhkiel.tsw.Frog;
+import de.fhkiel.tsw.armyoffrogs.Color;
 
-import steps.container.LogicContainer;
 import de.fhkiel.tsw.Bag;
+import steps.container.LogicContainer;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AufbauSteps {
 
@@ -41,36 +47,36 @@ public class AufbauSteps {
         System.out.println("Es spielen " + anzahl + " Spieler..");
     }
 
-
     @Wenn("der Beutel befüllt wird")
     public void der_beutel_befüllt_wird() {
         container.logic.startGame(numberOfPlayers);
-
-        System.out.println(getClass().getName() + " - " + bag.getNumberOfFrogs());
-        // Check what colors are in the bag
-        for (int i = 0; i < bag.getNumberOfFrogs(); i++) {
-            System.out.println("Farbe im Beutel: " + bag.takeFrog().getColor());
-        }
     }
 
-    /*
-    @Wenn("der Beutel befüllt wird")
-    void der_beutel_befüllt_wird() {
-        System.out.println("Beutel wird befüllt..");
-        for (int i = 0; i < container.logic.players().length; i++) {
-            for (int j = 0; j <= (numberOfPlayers * 10); j++) {
-                container.bag.putFrog(new Frog(container.logic.players()[i], null));
+    @Dann("mit Fröschen der Farbe {word}")
+    public void mit_fröschen_der_farbe(String color) {
+        List<Frog> frogs = bag.getFrogList();
+        Color[] colors = new Color[frogs.size() / 10]; // Annahme: Jeder Spieler hat maximal 10 Frösche im Beutel
+        System.out.println("Listsize: " + frogs.size());
 
+        if (!color.equals("null")) {
+            for (int i = 0; i < frogs.size(); i++) {
+                System.out.println("Farbe im Beutel: " + frogs.get(i).getColor());
+                Color frogColor = frogs.get(i).getColor();
+                if (!Arrays.asList(colors).contains(frogColor)) {
+                    // Farbe noch nicht im Array, hinzufügen
+                    for (int j = 0; j < colors.length; j++) {
+                        if (colors[j] == null) {
+                            colors[j] = frogColor;
+                            break;
+                        }
+                    }
+                }
             }
+            for (int i = 0; i < colors.length; i++) {
+                System.out.println("Folgende Farben in Liste: " + colors[i]);
+            }
+
+            assertThat(Arrays.asList(colors).contains(Color.valueOf(color))).isTrue();
         }
-        System.out.println("Frösche im Beutel liegen bei " + container.bag.getNumberOfFrogs());
-    }
-    */
-
-
-    @Dann("darf er das nur mit den Spielsteinen der Spielerfarben tun")
-    public void darf_er_das_nur_mit_den_spielsteinen_der_spielerfarben_tun() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
     }
 }
