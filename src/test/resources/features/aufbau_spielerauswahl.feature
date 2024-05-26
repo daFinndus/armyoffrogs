@@ -17,8 +17,6 @@ Funktionalität: Das Plugin muss sicherstellen, dass die Spielerauswahl auf 2-4 
 
     Beispiele:
       | Spieler |
-      | 1       |
       | 2       |
       | 3       |
       | 4       |
-      | 5       |

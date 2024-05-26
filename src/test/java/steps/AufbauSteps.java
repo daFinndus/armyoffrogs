@@ -52,6 +52,23 @@ public class AufbauSteps {
         container.logic.startGame(numberOfPlayers);
     }
 
+    @Wenn("die Spielerauswahl getroffen wurde")
+    public void die_spielerauswahl_getroffen_wurde() {
+        assertThat(numberOfPlayers).isGreaterThanOrEqualTo(2);
+        assertThat(numberOfPlayers).isLessThanOrEqualTo(4);
+        System.out.println("Die Spielerauswahl wurde getroffen..");
+    }
+
+    @Wenn("nicht zwei unterschreitet")
+    public void nicht_zwei_unterschreitet() {
+        assertThat(numberOfPlayers).isGreaterThanOrEqualTo(2);
+    }
+
+    @Wenn("nicht vier überschreitet")
+    public void nicht_vier_überschreitet() {
+        assertThat(numberOfPlayers).isLessThanOrEqualTo(4);
+    }
+
     @Dann("mit Fröschen der Farbe {word}")
     public void mit_fröschen_der_farbe(String color) {
         List<Frog> frogs = bag.getFrogList();
@@ -97,21 +114,6 @@ public class AufbauSteps {
 
             assertThat(Arrays.asList(colors)).contains(colorInstance);
         }
-    }
-
-    @Wenn("die Spielerauswahl getroffen wurde")
-    public void die_spielerauswahl_getroffen_wurde() {
-        System.out.println("Die Spielerauswahl wurde getroffen..");
-    }
-
-    @Wenn("nicht zwei unterschreitet")
-    public void nicht_zwei_unterschreitet() {
-        assertThat(numberOfPlayers).isGreaterThanOrEqualTo(2);
-    }
-
-    @Wenn("nicht vier überschreitet")
-    public void nicht_vier_überschreitet() {
-        assertThat(numberOfPlayers).isLessThanOrEqualTo(4);
     }
 
     @Dann("wird das Spiel mit {int} Spielern gestartet")
