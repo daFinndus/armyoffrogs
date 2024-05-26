@@ -12,7 +12,7 @@ public class GameStartSteps {
 
     private LogicContainer container;
 
-    private boolean success;
+    public boolean success;
 
     public GameStartSteps(LogicContainer container) {
         this.container = container;
@@ -23,6 +23,7 @@ public class GameStartSteps {
     public void das_spiel_mit_spielern_gestartet(int anzahl) {
         container.logic = new Gamelogic();
         success = container.logic.newGame(anzahl);
+        container.logic.startGame(anzahl);
     }
 
     @Dann("wird ein Spiel erstellt")

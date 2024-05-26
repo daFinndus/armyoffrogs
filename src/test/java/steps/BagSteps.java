@@ -39,8 +39,8 @@ public class BagSteps {
 
     @Dann("sind {int} Frösche im Beutel")
     public void sind_frösche_im_beutel(Integer erwarteteFrösche) {
+        System.out.print("Es sind " + frösche + " Frösche im Beutel bei " + erwarteteFrösche + " erwarteten Fröschen. ");
         assertThat(frösche).isEqualTo(erwarteteFrösche);
-        System.out.println("Es sind " + frösche + " Frösche im Beutel bei " + erwarteteFrösche + " erwarteten Fröschen.");
     }
 
 }

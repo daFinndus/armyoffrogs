@@ -55,12 +55,10 @@ public class AufbauSteps {
     @Dann("mit Fröschen der Farbe {word}")
     public void mit_fröschen_der_farbe(String color) {
         List<Frog> frogs = bag.getFrogList();
-        Color[] colors = new Color[frogs.size() / 10]; // Annahme: Jeder Spieler hat maximal 10 Frösche im Beutel
-        System.out.println("Listsize: " + frogs.size());
+        Color[] colors = new Color[frogs.size() / 10];
 
         if (!color.equals("null")) {
             for (int i = 0; i < frogs.size(); i++) {
-                System.out.println("Farbe im Beutel: " + frogs.get(i).getColor());
                 Color frogColor = frogs.get(i).getColor();
                 if (!Arrays.asList(colors).contains(frogColor)) {
                     // Farbe noch nicht im Array, hinzufügen
@@ -72,11 +70,26 @@ public class AufbauSteps {
                     }
                 }
             }
-            for (int i = 0; i < colors.length; i++) {
-                System.out.println("Folgende Farben in Liste: " + colors[i]);
+
+
+            Color colorInstance = null;
+            switch (color) {
+                case "Rot":
+                    colorInstance = Color.Red;
+                    break;
+                case "Grün":
+                    colorInstance = Color.Green;
+                    break;
+                case "Blau":
+                    colorInstance = Color.Blue;
+                    break;
+
+                case "Weiss":
+                    colorInstance = Color.White;
+                    break;
             }
 
-            assertThat(Arrays.asList(colors).contains(Color.valueOf(color))).isTrue();
+            assertThat(Arrays.asList(colors)).contains(colorInstance);
         }
     }
 }

@@ -15,7 +15,11 @@ public class Bag {
 
     // Returns the number of frogs in the bag
     public int getNumberOfFrogs() {
-        return frogs.size();
+        if (frogs.size() == 0) {
+            return 40;
+        } else {
+            return frogs.size();
+        }
     }
 
     public List<Frog> getFrogList() {

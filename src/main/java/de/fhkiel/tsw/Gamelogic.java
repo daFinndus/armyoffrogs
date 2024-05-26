@@ -11,6 +11,8 @@ public class Gamelogic implements Game {
     private Color[] players;
     private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
 
+    Boolean gameRunning = false;
+
     @Override
     public boolean newGame(int spieler) {
         // Check if the number of players is allowed
@@ -21,6 +23,7 @@ public class Gamelogic implements Game {
             Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
             players = Arrays.copyOfRange(colorOrder, 0, spieler);
 
+            gameRunning = true;
             return true;
         } else {
             players = new Color[0];
@@ -88,6 +91,11 @@ public class Gamelogic implements Game {
                 bag.putFrog(new Frog(players[i], null));
 
             }
+        }
+
+        // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
+        for (int i = 0; i < (2 * spieler); i++) {
+            bag.takeFrog();
         }
 
         players = Arrays.copyOfRange(Color.values(), 0, spieler);

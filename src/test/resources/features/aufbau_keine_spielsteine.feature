@@ -12,6 +12,6 @@ Funktionalität: Das Plugin muss verhindern, dass die Spielsteine, die nicht gen
 
     Beispiele:
       | Spieler | erste_Farbe | zweite_Farbe | dritte_Farbe | vierte_Farbe |
-      | 2       | Rot         | Blau         | null         | null         |
-      | 3       | Rot         | Blau         | Grün         | null         |
-      | 4       | Rot         | Blau         | Grün         | Weiss        |
+      | 2       | Rot         | Grün         | null         | null         |
+      | 3       | Rot         | Grün         | Blau         | null         |
+      | 4       | Rot         | Grün         | Blau         | Weiss        |
