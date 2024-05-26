@@ -4,9 +4,7 @@ import de.fhkiel.tsw.armyoffrogs.Game;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Position;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Gamelogic implements Game {
 
@@ -42,7 +40,7 @@ public class Gamelogic implements Game {
 
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
-        return playerFrogs.getOrDefault(spieler, new ArrayList<>());
+        return null;
     }
 
     @Override
