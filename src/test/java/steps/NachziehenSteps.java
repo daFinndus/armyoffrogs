@@ -21,8 +21,10 @@ public class NachziehenSteps {
         System.out.println(getClass().getName());
     }
 
-    @Angenommen("Das Spiel hat mit {int} Spielern begonnen")
-    public void es_wurde_mit_spielern_gestartet(int anzahl) {
+
+    @Angenommen("das Spiel hat mit {int} Spielern begonnen.")
+    public void das_spiel_hat_mit_spielern_begonnen(Integer anzahl) {
+        container.logic.newGame(anzahl);
         container.logic.startGame(anzahl);
     }
 
@@ -38,8 +40,8 @@ public class NachziehenSteps {
 
     }
 
-    @Dann("muss die Anzahl der sich im Vorrat befindenden Spielsteine 1 betragen")
-    public void muss_die_anzahl_der_sich_im_vorrat_befindenden_spielsteine_1_betragen() {
+    @Dann("muss die Anzahl der sich im Vorrat befindenden Spielsteine 1 betragen.")
+    public void muss_die_anzahl_der_sich_im_vorrat_befindenden_spielsteine_betragen() {
         int frogsInHandBefore = container.logic.getFrogsInHand(container.logic.players()[0]).size();
         if (frogsInHandBefore < 2) {
             Frog frog = container.logic.takeFrogFromBag();
