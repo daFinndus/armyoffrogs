@@ -3,7 +3,7 @@ Funktionalität: Das Plugin muss es dem Spieler verbieten, seine Bewegung zu bee
   aufreißen, also einen Spielstein ohne Verbindung hinterlassen würde.
 
   Szenario: Der Spieler versucht, das Spielfeld aufzureißen
-    Angenommen der zweite Spieler ist am Zug
+    Angenommen der Spieler mit der Teamfarbe Rot ist am Zug
     Wenn der Spieler seinen Frosch bewegen möchte
     Und er infolgedessen einen Spielstein ohne Verbindung hinterlässt
     Dann muss die Bewegung nicht erlaubt sein

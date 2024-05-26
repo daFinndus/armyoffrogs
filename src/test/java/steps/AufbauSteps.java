@@ -18,7 +18,7 @@ public class AufbauSteps {
     }
 
     @Angenommen("das Spiel wird vorbereitet")
-    void das_spiel_wird_vorbereitet() {
+    public void das_spiel_wird_vorbereitet() {
         int frogsInBag = container.bag.getNumberOfFrogs();
 
         if (frogsInBag == 40) {
