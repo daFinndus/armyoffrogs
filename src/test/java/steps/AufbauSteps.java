@@ -47,6 +47,12 @@ public class AufbauSteps {
         System.out.println("Es spielen " + anzahl + " Spieler..");
     }
 
+    @Angenommen("die Spielerfarben wurden vergeben")
+    public void die_spielerfarben_wurden_vergeben() {
+        container.logic.newGame(numberOfPlayers);
+        System.out.println("Die Spielerfarben wurden vergeben..");
+    }
+
     @Wenn("der Beutel befüllt wird")
     public void der_beutel_befüllt_wird() {
         container.logic.startGame(numberOfPlayers);
@@ -120,5 +126,10 @@ public class AufbauSteps {
     public void wird_das_spiel_mit_spielern_gestartet(Integer anzahl) {
         assertThat(numberOfPlayers).isEqualTo(anzahl);
         System.out.println("Das Spiel wird mit " + anzahl + " Spielern gestartet..");
+    }
+    @Dann("sollten {int} Spielsteine im Beutel liegen")
+    public void sollten_spielsteine_im_beutel_liegen(Integer anzahl) {
+        assertThat(bag.getNumberOfFrogs()).isEqualTo(numberOfPlayers);
+        System.out.println("Es liegen " + anzahl + " Spielsteine im Beutel..");
     }
 }

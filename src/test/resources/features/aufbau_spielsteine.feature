@@ -10,7 +10,7 @@ Funktionalität: Das Plugin muss gewährleisten, dass sich zu Spielbeginn je 10 
 
   Szenariogrundriss: Das Spiel wird vorbereitet und der Beutel muss gefüllt werden
     Angenommen das Spiel wird vorbereitet
-    Und es gibt <Spieler> Spieler
+    Und es nehmen <Spieler> Spieler teil
     Und die Spielerfarben wurden vergeben
     Wenn der Beutel befüllt wird
     Dann sollten <Spielsteine> Spielsteine im Beutel liegen
