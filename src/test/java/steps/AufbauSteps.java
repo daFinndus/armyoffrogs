@@ -55,7 +55,12 @@ public class AufbauSteps {
 
     @Wenn("der Beutel befüllt wird")
     public void der_beutel_befüllt_wird() {
-        container.logic.startGame(numberOfPlayers);
+        if (bag.getNumberOfFrogs() == numberOfPlayers * 10) {
+            System.out.println("Der Beutel ist bereits befüllt..");
+        } else {
+            container.logic.newGame(numberOfPlayers);
+            System.out.println("Der Beutel wird befüllt..");
+        }
     }
 
     @Wenn("die Spieler ihre ersten zwei Steine erhalten")
@@ -148,5 +153,11 @@ public class AufbauSteps {
     public void der_beutel_enthaelt_jetzt_steine_weniger(Integer anzahl) {
         int frogsInBag = bag.getNumberOfFrogs();
         assertThat(frogsInBag).isEqualTo((numberOfPlayers * 10) - anzahl);
+    }
+
+    @Dann("sollten {int} Spielsteine im Beutel liegen")
+    public void sollten_spielsteine_im_beutel_liegen(Integer anzahl) {
+        int frogsInBag = bag.getNumberOfFrogs();
+        assertThat(frogsInBag).isEqualTo(anzahl);
     }
 }

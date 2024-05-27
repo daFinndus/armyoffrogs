@@ -23,6 +23,13 @@ public class Gamelogic implements Game {
             Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
             players = Arrays.copyOfRange(colorOrder, 0, spieler);
 
+            // Beutel wird befüllt
+            for (int i = 0; i < players.length; i++) {
+                for (int j = 0; j < 10; j++) {
+                    bag.putFrog(new Frog(players[i], null));
+                }
+            }
+
             bag.setGameRunning(true);
             return true;
         } else {
@@ -92,15 +99,7 @@ public class Gamelogic implements Game {
         return bag.getNumberOfFrogs();
     }
 
-    // Der Beutel wird befüllt mit Fröschen der jeweiligen Spielerfarben
     public void startGame(int spieler) {
-
-        for (int i = 0; i < players.length; i++) {
-            for (int j = 0; j < 10; j++) {
-                bag.putFrog(new Frog(players[i], null));
-            }
-        }
-
         // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
         for (int i = 0; i < spieler; i++) {
             for (int j = 0; j < 2; j++) {
