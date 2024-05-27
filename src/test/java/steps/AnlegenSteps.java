@@ -18,8 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AnlegenSteps {
 
 
-    private LogicContainer container;
-
+    private final LogicContainer container;
 
     Color currentPlayer;
 
@@ -31,19 +30,19 @@ public class AnlegenSteps {
     // Potentiell das hier umschreiben in was cooleres
     @Angenommen("der {word} Spieler möchte einen Frosch anlegen")
     public void der_spieler_möchte_einen_frosch_anlegen(String order) {
-        Color currentPlayerColor;
+
         switch (order) {
             case "erste":
-                currentPlayerColor = container.logic.players()[0];
+                currentPlayer= container.logic.players()[0];
                 break;
             case "zweite":
-                currentPlayerColor = container.logic.players()[1];
+                currentPlayer = container.logic.players()[1];
                 break;
             case "dritte":
-                currentPlayerColor = container.logic.players()[2];
+                currentPlayer= container.logic.players()[2];
                 break;
             case "vierte":
-                currentPlayerColor = container.logic.players()[3];
+                currentPlayer = container.logic.players()[3];
                 break;
             default:
                 throw new IllegalArgumentException("Ungültige Reihenfolge: " + order);
@@ -53,16 +52,24 @@ public class AnlegenSteps {
 
     @Wenn("der Frosch die eigene Teamfarbe hat")
     public void der_frosch_die_eigene_teamfarbe_hat() {
-        // Erhalten Sie die Farbe des aktuellen Spielers
-        Color currentPlayerColor = container.round.getCurrentPlayer();
+        // Erhalten Sie die Liste der Frösche in der Hand des aktuellen Spielers
+        List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
 
-        // Erstellen Sie einen Frosch mit der Farbe des aktuellen Spielers
-        Frog frog = new Frog(currentPlayerColor);
-
-        // Überprüfen Sie, ob der Frosch die Farbe des aktuellen Spielers hat
-        if (!frog.getColor().equals(currentPlayerColor)) {
-            throw new IllegalArgumentException("Der Frosch hat nicht die Farbe des aktuellen Spielers");
+        // Wählen Sie einen Frosch mit der Farbe des aktuellen Spielers
+        Color frog = null;
+        for ( Color f : frogsInHand) {
+            if (f.equals(currentPlayer)) {
+                frog = f;
+                break;
+            }
         }
+
+        // Überprüfen Sie, ob ein Frosch mit der Farbe des aktuellen Spielers gefunden wurde
+        if (frog == null) {
+            throw new IllegalArgumentException("Kein Frosch mit der Farbe des aktuellen Spielers gefunden");
+        }
+
+        // Nun können Sie den Frosch für weitere Aktionen verwenden
     }
 
 

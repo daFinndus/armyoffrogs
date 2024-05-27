@@ -12,9 +12,6 @@ public class Frog {
         this.position = position;
     }
 
-    public Frog(Color currentPlayerColor) {
-        this.color = currentPlayerColor;
-    }
 
     public Color getColor() {
         return color;
