@@ -3,7 +3,7 @@ Funktionalität: Das System muss sicherstellen, dass der Startspieler das Spiel 
   Stein aus seinem Vorrat auf das Spielfeld legt.
 
   Szenario: Der Startspieler möchte den ersten Stein legen um das Spiel zu beginnen
-    Angenommen das Spiel wird gestartet
+    Angenommen das Spiel startet mit 3 Spielern
     Und die Spielerfarben wurden vergeben
     Wenn der Startspieler festgelegt wurde
     Dann muss dieser einen beliebigen Stein aus seinem Vorrat legen
