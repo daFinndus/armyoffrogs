@@ -1,6 +1,7 @@
 package steps;
 
 
+import de.fhkiel.tsw.Position;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import io.cucumber.java.de.Angenommen;
 import io.cucumber.java.de.Dann;
@@ -113,7 +114,11 @@ public class AnlegenSteps {
 
     @Dann("muss dieser einen beliebigen Stein aus seinem Vorrat legen")
     public void muss_dieser_einen_beliebigen_stein_aus_seinem_vorrat_legen() {
+        List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
 
+        Color frog = frogsInHand.getFirst();
+        container.logic.selectedFrogInHand(currentPlayer, frog);
+        container.board.placeFrogOnBoard(currentPlayer, (Position) container.board.getBoard().getFirst());
         // Write code here that turns the phrase above into concrete actions
         System.out.println("Der Spieler muss einen beliebigen Stein aus seinem Vorrat legen..");
     }
