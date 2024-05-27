@@ -17,7 +17,9 @@ public class NachziehenSteps {
     private LogicContainer container;
 
     private int numberOfPlayers;
-    private Color currentPlayer;
+    public Color currentPlayer;
+
+    AnlegenSteps anlegenSteps = new AnlegenSteps(container);
 
     public NachziehenSteps(LogicContainer container) {
         this.container = container;
@@ -60,6 +62,7 @@ public class NachziehenSteps {
         container.logic.takeFrogFromBag();
     }
 
+    // Das hier muss potentiell noch etwas logischer verfasst werden
     @Wenn("der Spieler die Aktion Nachziehen überspringen will")
     public void der_spieler_die_aktion_nachziehen_ueberspringen_will() {
         System.out.println("Der Spieler möchte die Aktion Nachziehen überspringen..");
