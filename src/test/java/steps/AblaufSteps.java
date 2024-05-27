@@ -69,6 +69,23 @@ public class AblaufSteps {
 
     @Dann("muss der nächste Spieler die Teamfarbe {word} haben")
     public void muss_der_nächste_spieler_die_teamfarbe_haben(String teamfarbe) {
+        switch (teamfarbe) {
+            case "Rot":
+                teamfarbe = "Red";
+                break;
+            case "Gruen":
+                teamfarbe = "Green";
+                break;
+            case "Blau":
+                teamfarbe = "Blue";
+                break;
+            case "Weiss":
+                teamfarbe = "White";
+                break;
+            default:
+                throw new IllegalArgumentException("Not a valid color: " + teamfarbe);
+        }
+
         assertThat(container.round.getCurrentPlayer().toString()).isEqualTo(teamfarbe);
     }
 

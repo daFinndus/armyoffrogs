@@ -148,7 +148,6 @@ public class AufbauSteps {
         }
     }
 
-
     @Dann("wird das Spiel mit {int} Spielern gestartet")
     public void wird_das_spiel_mit_spielern_gestartet(Integer anzahl) {
         assertThat(numberOfPlayers).isEqualTo(anzahl);

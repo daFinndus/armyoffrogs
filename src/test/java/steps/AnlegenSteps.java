@@ -1,7 +1,6 @@
 package steps;
 
 
-import de.fhkiel.tsw.Frog;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import io.cucumber.java.de.Angenommen;
 import io.cucumber.java.de.Dann;
@@ -12,7 +11,6 @@ import steps.container.LogicContainer;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 
 public class AnlegenSteps {
