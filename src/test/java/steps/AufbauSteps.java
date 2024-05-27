@@ -142,7 +142,7 @@ public class AufbauSteps {
     @Dann("muss jeder Spieler zwei Steine aus dem Beutel in ihren Vorrat bekommen")
     public void muss_jeder_spieler_zwei_steine_aus_dem_beutel_in_ihren_vorrat_bekommen() {
         for (int i = 0; i < numberOfPlayers; i++) {
-            int frogsInHand = container.logic.getFrogsOfPlayer(container.logic.players()[i]).length;
+            int frogsInHand = container.logic.getFrogsInHand(container.logic.players()[i]).size();
 
             assertThat(frogsInHand).isEqualTo(2);
         }
