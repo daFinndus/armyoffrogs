@@ -7,12 +7,12 @@ public class Gameround {
     private Color currentPlayer;
 
 
-    // Function for ending the turn of a certain player
+    // Funktion für das Beenden eines Zuges
     public void endTurn(Color spieler, Color[] players) {
         int numberOfPlayers = players.length;
 
 
-        // Find the current player's index
+        // Herausfinden des Index' des aktuellen Spielers
         int currentIndex = -1;
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players[i].equals(spieler)) {
@@ -21,13 +21,13 @@ public class Gameround {
             }
         }
 
-        // Calculate the index for the next player
+        // Berechnen des Index' des nächsten Spielers
         int nextIndex = (currentIndex + 1) % numberOfPlayers;
 
-        // Set the next player as the current player
+        // Festsetzen des nächsten Spielers
         currentPlayer = players[nextIndex];
 
-        // Increment the round counter
+        // Rundenzähler hochzählen
         round = round + 1;
     }
 
