@@ -3,7 +3,7 @@ Funktionalität:Das System sollte dem Spieler die Möglichkeit bieten, die Aktio
   keine Steine mehr im Beutel vorhanden sind.
 
   Szenario: Der Spieler will die Aktion Nachziehen überspringen
-    Angenommen Das Spiel beginnt mit 2 Spielern
-    Und Der zweite Spieler ist am Zug
-    Wenn Der Spieler die Aktion Nachziehen überspringen will
-    Dann muss die anzahl der Spielsteine in seinem Vorrat 2 betragen
+    Angenommen das Spiel hat mit 2 Spielern begonnen
+    Und der zweite Spieler ist am Zug
+    Wenn der Spieler die Aktion Nachziehen überspringen will
+    Dann muss die Anzahl der Spielsteine in seinem Vorrat 2 betragen

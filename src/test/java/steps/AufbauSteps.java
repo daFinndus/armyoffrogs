@@ -40,6 +40,12 @@ public class AufbauSteps {
         }
     }
 
+    // Potentiell das hier umschreiben in was cooleres
+    @Angenommen("Das Spiel ist initialisiert")
+    public void das_spiel_ist_initialisiert() {
+        System.out.println("Das Spiel ist initialisiert..");
+    }
+
     @Angenommen("es nehmen {int} Spieler teil")
     public void es_nehmen_spieler_teil(Integer anzahl) {
         numberOfPlayers = anzahl;
@@ -55,6 +61,16 @@ public class AufbauSteps {
 
     @Wenn("der Beutel befüllt wird")
     public void der_beutel_befüllt_wird() {
+        if (bag.getNumberOfFrogs() == numberOfPlayers * 10) {
+            System.out.println("Der Beutel ist bereits befüllt..");
+        } else {
+            container.logic.newGame(numberOfPlayers);
+            System.out.println("Der Beutel wird befüllt..");
+        }
+    }
+
+    @Wenn("die Spieler ihre ersten zwei Steine erhalten")
+    public void die_spieler_ihre_ersten_zwei_steine_erhalten() {
         container.logic.startGame(numberOfPlayers);
     }
 
@@ -122,14 +138,32 @@ public class AufbauSteps {
         }
     }
 
+
+    @Dann("muss jeder Spieler zwei Steine aus dem Beutel in ihren Vorrat bekommen")
+    public void muss_jeder_spieler_zwei_steine_aus_dem_beutel_in_ihren_vorrat_bekommen() {
+        for (int i = 0; i < numberOfPlayers; i++) {
+            int frogsInHand = container.logic.getFrogsOfPlayer(container.logic.players()[i]).length;
+
+            assertThat(frogsInHand).isEqualTo(2);
+        }
+    }
+
+
     @Dann("wird das Spiel mit {int} Spielern gestartet")
     public void wird_das_spiel_mit_spielern_gestartet(Integer anzahl) {
         assertThat(numberOfPlayers).isEqualTo(anzahl);
         System.out.println("Das Spiel wird mit " + anzahl + " Spielern gestartet..");
     }
+
+    @Dann("der Beutel enthält jetzt {int} Steine weniger")
+    public void der_beutel_enthaelt_jetzt_steine_weniger(Integer anzahl) {
+        int frogsInBag = bag.getNumberOfFrogs();
+        assertThat(frogsInBag).isEqualTo((numberOfPlayers * 10) - anzahl);
+    }
+
     @Dann("sollten {int} Spielsteine im Beutel liegen")
     public void sollten_spielsteine_im_beutel_liegen(Integer anzahl) {
-        assertThat(bag.getNumberOfFrogs()).isEqualTo(numberOfPlayers);
-        System.out.println("Es liegen " + anzahl + " Spielsteine im Beutel..");
+        int frogsInBag = bag.getNumberOfFrogs();
+        assertThat(frogsInBag).isEqualTo(anzahl);
     }
 }

@@ -23,6 +23,13 @@ public class Gamelogic implements Game {
             Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
             players = Arrays.copyOfRange(colorOrder, 0, spieler);
 
+            // Beutel wird befüllt
+            for (int i = 0; i < players.length; i++) {
+                for (int j = 0; j < 10; j++) {
+                    bag.putFrog(new Frog(players[i], null));
+                }
+            }
+
             bag.setGameRunning(true);
             return true;
         } else {
@@ -41,10 +48,21 @@ public class Gamelogic implements Game {
         return null;
     }
 
+    public void addFrogToHand(Color spieler, Frog frog) {
+        playerFrogs.computeIfAbsent(spieler, k -> new ArrayList<>()).add(frog);
+    }
+
+    // Das funktioniert noch nicht ganz
+    public Frog[] getFrogsOfPlayer(Color spieler) {
+        List<Frog> frogs = playerFrogs.getOrDefault(spieler, Collections.emptyList()); // Korrigierte Variable
+        return frogs.toArray(new Frog[0]);
+    }
+
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
         return null;
     }
+
 
     @Override
     public Set<Position> getBoard() {
@@ -81,20 +99,16 @@ public class Gamelogic implements Game {
         return bag.getNumberOfFrogs();
     }
 
-    // Der Beutel wird befüllt mit Fröschen der jeweiligen Spielerfarben
     public void startGame(int spieler) {
-
-        for (int i = 0; i < players.length; i++) {
-            for (int j = 0; j < 10; j++) {
-                bag.putFrog(new Frog(players[i], null));
-
+        // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
+        for (int i = 0; i < spieler; i++) {
+            for (int j = 0; j < 2; j++) {
+                Frog frog = bag.takeFrog();
+                addFrogToHand(players[i], frog);
+                System.out.println("Spieler " + players[i] + " bekommt Frosch " + frog.getColor() + " hinzugefügt.");
             }
         }
 
-        // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
-        for (int i = 0; i < (2 * spieler); i++) {
-            bag.takeFrog();
-        }
 
         players = Arrays.copyOfRange(Color.values(), 0, spieler);
 
