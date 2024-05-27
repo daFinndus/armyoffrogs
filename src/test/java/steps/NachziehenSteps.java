@@ -68,8 +68,10 @@ public class NachziehenSteps {
         System.out.println("Der Spieler möchte die Aktion Nachziehen überspringen..");
     }
 
-    @Dann("muss die Anzahl der Spielsteine in seinem Vorrat {int} betragen")
-    public void muss_die_anzahl_der_spielsteine_in_seinem_vorrat_betragen(Integer anzahl) {
+    @Dann("muss die Anzahl der sich im Vorrat befindenden Spielsteine {int} betragen.")
+    public void muss_die_anzahl_der_sich_im_vorrat_befindenden_spielsteine_betragen(Integer anzahl) {
+        container.logic.removeFrogFromHand(currentPlayer, 0);
+
         int frogsInHand = container.logic.getFrogsInHand(currentPlayer).size();
 
         assertThat(frogsInHand).isEqualTo(anzahl);

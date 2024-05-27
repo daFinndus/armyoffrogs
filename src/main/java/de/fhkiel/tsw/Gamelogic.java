@@ -53,9 +53,12 @@ public class Gamelogic implements Game {
         playerFrogs.computeIfAbsent(spieler, k -> new ArrayList<>()).add(frog);
     }
 
-    // Funktion um einen Frosch zu entfernen
-    public void removeFrogFromHand(Color spieler, Frog frog) {
-        playerFrogs.get(spieler).remove(frog);
+    // Funktion um einen Frosch an einem bestimmten Index zu entfernen
+    public void removeFrogFromHand(Color spieler, Integer index) {
+        List<Frog> frogs = playerFrogs.get(spieler);
+        if (frogs != null) {
+            playerFrogs.get(spieler).remove((int) index);
+        }
     }
 
     @Override
@@ -111,7 +114,6 @@ public class Gamelogic implements Game {
             for (int j = 0; j < 2; j++) {
                 Frog frog = bag.takeFrog();
                 addFrogToHand(players[i], frog);
-                System.out.println("Spieler " + players[i] + " bekommt Frosch " + frog.getColor() + " hinzugefügt.");
             }
         }
 
