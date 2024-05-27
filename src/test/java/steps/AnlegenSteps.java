@@ -28,18 +28,18 @@ public class AnlegenSteps {
     }
 
     // Potentiell das hier umschreiben in was cooleres
-    @Angenommen("der {word} Spieler möchte einen Frosch anlegen")
-    public void der_spieler_möchte_einen_frosch_anlegen(String order) {
+    @Angenommen("der {word} Spieler ist am Zug")
+    public void der_spieler_ist_am_zug(String order) {
 
         switch (order) {
             case "erste":
-                currentPlayer= container.logic.players()[0];
+                currentPlayer = container.logic.players()[0];
                 break;
             case "zweite":
                 currentPlayer = container.logic.players()[1];
                 break;
             case "dritte":
-                currentPlayer= container.logic.players()[2];
+                currentPlayer = container.logic.players()[2];
                 break;
             case "vierte":
                 currentPlayer = container.logic.players()[3];
@@ -57,7 +57,7 @@ public class AnlegenSteps {
 
         // Wählen Sie einen Frosch mit der Farbe des aktuellen Spielers
         Color frog = null;
-        for ( Color f : frogsInHand) {
+        for (Color f : frogsInHand) {
             if (f.equals(currentPlayer)) {
                 frog = f;
                 break;
@@ -77,6 +77,13 @@ public class AnlegenSteps {
     public void er_die_aktion_anlegen_überspringen_will() {
         System.out.println("Der Spieler möchte die Aktion Anlegen überspringen..");
     }
+
+    @Wenn("der Startspieler festgelegt wurde")
+    public void der_startspieler_festgelegt_wurde() {
+        // Write code here that turns the phrase above into concrete actions
+        System.out.println("Der Startspieler wurde festgelegt..");
+    }
+
 
     // Das hier muss noch mit der GUI kombiniert werden, aktuell wird nur der Vorrat überprüft
     // Das läuft logischerweise auch nur durch, wenn beide Frösche im Vorrat die Teamfarbe haben
@@ -104,5 +111,12 @@ public class AnlegenSteps {
     @Dann("darf der Frosch ausschließlich an andersfarbigen Fröschen platziert werden")
     public void darf_der_frosch_ausschließlich_an_andersfarbigen_fröschen_platziert_werden() {
         //kann man erst implementieren, wenn die GUI fertig ist
+    }
+
+    @Dann("muss dieser einen beliebigen Stein aus seinem Vorrat legen")
+    public void muss_dieser_einen_beliebigen_stein_aus_seinem_vorrat_legen() {
+
+        // Write code here that turns the phrase above into concrete actions
+        System.out.println("Der Spieler muss einen beliebigen Stein aus seinem Vorrat legen..");
     }
 }

@@ -35,27 +35,6 @@ public class NachziehenSteps {
         container.logic.startGame(anzahl);
     }
 
-    @Und("der {word} Spieler ist am Zug")
-    public void der_spieler_ist_am_zug(String spieler) {
-        switch (spieler) {
-            case "erste":
-                currentPlayer = Color.Red;
-                break;
-            case "zweite":
-                currentPlayer = Color.Green;
-                break;
-            case "dritte":
-                currentPlayer = Color.Blue;
-                break;
-            case "vierte":
-                currentPlayer = Color.White;
-                break;
-            default:
-                throw new IllegalArgumentException("Not a valid player: " + spieler);
-        }
-
-        container.logic.selectedFrogInHand(container.logic.players()[0], Color.Red);
-    }
 
     @Wenn("er einen neuen Spielstein ziehen will")
     public void er_einen_neuen_spielstein_ziehen_will() {
