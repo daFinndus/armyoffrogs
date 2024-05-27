@@ -103,9 +103,6 @@ public class AnlegenSteps {
 
     @Dann("darf der Frosch ausschließlich an andersfarbigen Fröschen platziert werden")
     public void darf_der_frosch_ausschließlich_an_andersfarbigen_fröschen_platziert_werden() {
-        // This step would involve checking the color of the frogs adjacent to the position where the current player wants to place their frog.
-        // If any of them have the same color as the current player's frog, throw an exception.
-        // The implementation of this step would depend on how you've structured your game and how you're keeping track of the game state.
-        // As such, it's not possible to provide a specific code example without more information.
+        //kann man erst implementieren, wenn die GUI fertig ist
     }
 }

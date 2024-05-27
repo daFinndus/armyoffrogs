@@ -3,7 +3,7 @@ Funktionalität: Das System muss ermöglichen, dass Spielsteine, die nicht der T
   angelegt werden dürfen.
 
   Szenario: Der Spieler möchte einen Spielstein anlegen, der nicht die eigene Teamfarbe hat
-    Angenommen das Spiel startet mit 2 Spielern
+    Angenommen das Spiel ist mit 2 Spielern gestartet
     Und der zweite Spieler ist am Zug
     Wenn dieser einen Spielstein anlegen möchte der nicht der eigenen Teamfarbe entspricht
     Dann muss dieser an alle Spielsteine angelegt werden können
