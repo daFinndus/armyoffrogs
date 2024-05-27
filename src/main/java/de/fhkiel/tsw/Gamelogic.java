@@ -9,7 +9,7 @@ import java.util.*;
 public class Gamelogic implements Game {
 
     private Color[] players;
-    private Map<Color, Frog> playerFrogs = new HashMap<>();
+    private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
 
     public Bag bag = new Bag();
 
@@ -42,14 +42,13 @@ public class Gamelogic implements Game {
     }
 
     public void addFrogToHand(Color spieler, Frog frog) {
-        playerFrogs.put(spieler, frog);
+        playerFrogs.computeIfAbsent(spieler, k -> new ArrayList<>()).add(frog);
     }
 
     // Das funktioniert noch nicht ganz
-    public List<Frog> getFrogsOfPlayer(Color spieler) {
-        List<Frog> frogs = new ArrayList<>();
-        frogs.add(playerFrogs.get(spieler));
-        return frogs;
+    public Frog[] getFrogsOfPlayer(Color spieler) {
+        List<Frog> frogs = playerFrogs.getOrDefault(spieler, Collections.emptyList()); // Korrigierte Variable
+        return frogs.toArray(new Frog[0]);
     }
 
     @Override
