@@ -128,7 +128,6 @@ public class AufbauSteps {
                 case "Blau":
                     colorInstance = Color.Blue;
                     break;
-
                 case "Weiss":
                     colorInstance = Color.White;
                     break;

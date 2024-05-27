@@ -4,7 +4,7 @@ Funktionalität: Das System muss sicherstellen, dass der Spieler einen zufällig
 
   Szenariogrundriss: Spieler möchte einen Spielstein aus dem Beutel zu seinem Vorrat hinzufügen.
     Angenommen das Spiel hat mit <Spieler> Spielern begonnen
-    Und der erste Spieler ist am Zug
+    Und der erste Spieler ist an der Reihe
     Wenn er einen neuen Spielstein ziehen will
     Dann muss die Anzahl der Spielsteine in seinem Vorrat 1 betragen
 
