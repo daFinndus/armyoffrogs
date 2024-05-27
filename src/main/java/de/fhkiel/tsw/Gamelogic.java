@@ -8,13 +8,14 @@ import java.util.*;
 
 public class Gamelogic implements Game {
 
-    private Color[] players;
+    private Color[] players = new Color[0];
     private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
 
     public Bag bag = new Bag();
 
     @Override
     public boolean newGame(int spieler) {
+        System.out.println("newGame(" + spieler + ") ausgeführt.");
         // Check if the number of players is allowed
         if (2 <= spieler && spieler <= 4) {
             players = new Color[spieler];
@@ -40,12 +41,14 @@ public class Gamelogic implements Game {
 
     @Override
     public Color[] players() {
+        System.out.println("players() ausgeführt.");
         return players;
     }
 
     @Override
     public String getInfo() {
-        return null;
+        System.out.println("getInfo() ausgeführt.");
+        return "Hier kann was gesagt werden.";
     }
 
     // Funktion um einen Frosch zur Hand hinzuzufügen
@@ -63,6 +66,7 @@ public class Gamelogic implements Game {
 
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
+        System.out.println("getFrogsInHand(" + spieler + ") ausgeführt.");
         List<Frog> frogs = playerFrogs.getOrDefault(spieler, Collections.emptyList()); // Korrigierte Variable
         List<Color> colors = new ArrayList<>();
 
@@ -75,31 +79,35 @@ public class Gamelogic implements Game {
 
     @Override
     public Set<Position> getBoard() {
-        return null;
+        System.out.println("getBoard() ausgeführt.");
+        return new HashSet<>();
     }
 
     @Override
     public void clicked(Position position) {
-        System.out.println("Clicked on something..");
+        System.out.println("clicked(" + position + ") ausgeführt.");
     }
 
     @Override
     public void selectedFrogInHand(Color spieler, Color frog) {
-        System.out.println("Selected frog in hand..");
+        System.out.println("selectedFrogInHand(" + spieler + ", " + frog + ") ausgeführt.");
     }
 
     @Override
     public Color winner() {
+        System.out.println("winner() ausgeführt.");
         return null;
     }
 
     @Override
     public boolean save(String filename) {
+        System.out.println("save(" + filename + ") ausgeführt.");
         return false;
     }
 
     @Override
     public boolean load(String filename) {
+        System.out.println("load(" + filename + ") ausgeführt.");
         return false;
     }
 
@@ -109,6 +117,7 @@ public class Gamelogic implements Game {
     }
 
     public void startGame(int spieler) {
+        System.out.println("startGame(" + spieler + ") ausgeführt.");
         // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
         for (int i = 0; i < spieler; i++) {
             for (int j = 0; j < 2; j++) {

@@ -15,8 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class AnlegenSteps {
-
-
     private final LogicContainer container;
 
     Color currentPlayer;
@@ -49,9 +47,9 @@ public class AnlegenSteps {
         // Write code here that turns the phrase above into concrete actions
     }
 
+    // Diese Funktion klappt nur dann, wenn ein Frosch die Farbe des aktuellen Spielers hat
     @Wenn("der Frosch die eigene Teamfarbe hat")
     public void der_frosch_die_eigene_teamfarbe_hat() {
-        // Erhalten Sie die Liste der Frösche in der Hand des aktuellen Spielers
         List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
 
         // Wählen Sie einen Frosch mit der Farbe des aktuellen Spielers
@@ -116,9 +114,9 @@ public class AnlegenSteps {
     public void muss_dieser_einen_beliebigen_stein_aus_seinem_vorrat_legen() {
         List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
 
-        Color frog = frogsInHand.getFirst();
+        Color frog = frogsInHand.get(0);
         container.logic.selectedFrogInHand(currentPlayer, frog);
-        container.board.placeFrogOnBoard(currentPlayer, (Position) container.board.getBoard().getFirst());
+        container.board.placeFrogOnBoard(currentPlayer, (Position) container.board.getBoard().get(0));
         // Write code here that turns the phrase above into concrete actions
         System.out.println("Der Spieler muss einen beliebigen Stein aus seinem Vorrat legen..");
     }
