@@ -61,12 +61,7 @@ public class AufbauSteps {
 
     @Wenn("der Beutel befüllt wird")
     public void der_beutel_befüllt_wird() {
-        if (bag.getNumberOfFrogs() == numberOfPlayers * 10) {
-            System.out.println("Der Beutel ist bereits befüllt..");
-        } else {
-            container.logic.newGame(numberOfPlayers);
-            System.out.println("Der Beutel wird befüllt..");
-        }
+        System.out.println("Der Beutel wird befüllt..");
     }
 
     @Wenn("die Spieler ihre ersten zwei Steine erhalten")
@@ -96,7 +91,7 @@ public class AufbauSteps {
         List<Frog> frogs = bag.getFrogList();
         Color[] colors = new Color[container.logic.players().length];
 
-        System.out.println("Frog size: " + frogs.size());
+        System.out.println("Frog size: " + bag.getNumberOfFrogs());
         System.out.println("Color size: " + colors.length);
 
         if (!color.equals("null")) {

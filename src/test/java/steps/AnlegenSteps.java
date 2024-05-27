@@ -1,8 +1,8 @@
 package steps;
 
 
-import de.fhkiel.tsw.Position;
 import de.fhkiel.tsw.armyoffrogs.Color;
+import de.fhkiel.tsw.armyoffrogs.Position;
 import io.cucumber.java.de.Angenommen;
 import io.cucumber.java.de.Dann;
 import io.cucumber.java.de.Wenn;
