@@ -6,7 +6,7 @@ Funktionalität: Das System muss sicherstellen, dass der Spieler einen zufällig
     Angenommen das Spiel hat mit <Spieler> Spielern begonnen
     Und der erste Spieler ist am Zug
     Wenn er einen neuen Spielstein ziehen will
-    Dann muss die Anzahl der sich im Vorrat befindenden Spielsteine 1 betragen.
+    Dann muss die Anzahl der Spielsteine in seinem Vorrat 1 betragen
 
     Beispiele:
       | Spieler |

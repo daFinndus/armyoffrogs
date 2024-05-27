@@ -1,7 +1,6 @@
 package steps;
 
 
-import de.fhkiel.tsw.Frog;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import io.cucumber.java.de.Angenommen;
 import io.cucumber.java.de.Dann;
@@ -12,7 +11,6 @@ import steps.container.LogicContainer;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 
 public class AnlegenSteps {
@@ -33,13 +31,13 @@ public class AnlegenSteps {
 
         switch (order) {
             case "erste":
-                currentPlayer= container.logic.players()[0];
+                currentPlayer = container.logic.players()[0];
                 break;
             case "zweite":
                 currentPlayer = container.logic.players()[1];
                 break;
             case "dritte":
-                currentPlayer= container.logic.players()[2];
+                currentPlayer = container.logic.players()[2];
                 break;
             case "vierte":
                 currentPlayer = container.logic.players()[3];
@@ -57,7 +55,7 @@ public class AnlegenSteps {
 
         // Wählen Sie einen Frosch mit der Farbe des aktuellen Spielers
         Color frog = null;
-        for ( Color f : frogsInHand) {
+        for (Color f : frogsInHand) {
             if (f.equals(currentPlayer)) {
                 frog = f;
                 break;
