@@ -15,9 +15,9 @@ public class AnlegenSteps {
     }
 
     @Angenommen("das Spiel startet mit {int} Spielern")
-    public void das_spiel_startet_mit_spielern(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void das_spiel_startet_mit_spielern(Integer anzahl) {
+        container.logic.newGame(anzahl);
+        container.logic.startGame(anzahl);
     }
 
     @Wenn("er die Aktion Anlegen überspringen will")
