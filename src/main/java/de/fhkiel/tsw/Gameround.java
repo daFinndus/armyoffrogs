@@ -2,10 +2,10 @@ package de.fhkiel.tsw;
 
 import de.fhkiel.tsw.armyoffrogs.Color;
 
+
 public class Gameround {
     private int round = 0;
     private Color currentPlayer;
-
 
     // Funktion für das Beenden eines Zuges
     public void endTurn(Color spieler, Color[] players) {
@@ -32,31 +32,16 @@ public class Gameround {
     }
 
     // Getter for currentPlayer, if needed
-    public String getCurrentPlayer() {
-        String derzeitigerSpieler;
-
-        switch (currentPlayer) {
-            case Green:
-                derzeitigerSpieler = "Gruen";
-                break;
-            case Red:
-                derzeitigerSpieler = "Rot";
-                break;
-            case Blue:
-                derzeitigerSpieler = "Blau";
-                break;
-            case White:
-                derzeitigerSpieler = "Weiss";
-                break;
-            default:
-                throw new IllegalArgumentException("Not a valid color: " + currentPlayer);
-        }
-
-        return derzeitigerSpieler;
+    public Color getCurrentPlayer() {
+        return currentPlayer;
     }
+
+
+
 
     // Getter for round, if needed
     public int getRound() {
         return round;
     }
 }
+

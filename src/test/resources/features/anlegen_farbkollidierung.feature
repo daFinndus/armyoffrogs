@@ -3,7 +3,7 @@ Funktionalität: Das System muss überprüfen, dass Spielsteine der eigenen Farb
   Spielsteine angelegt werden können.
 
   Szenario: Spieler möchte einen Frosch mit der eigenen Teamfarbe anlegen
-    Angenommen das Spiel startet mit 2 Spielern
+    Angenommen das Spiel ist mit 2 Spielern gestartet
     Und der zweite Spieler möchte einen Frosch anlegen
-    Wenn der Frosch die eigene teamfarbe hat
+    Wenn der Frosch die eigene Teamfarbe hat
     Dann darf der Frosch ausschließlich an andersfarbigen Fröschen platziert werden
