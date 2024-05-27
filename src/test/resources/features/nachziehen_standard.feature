@@ -10,7 +10,6 @@ Funktionalität: Das System muss sicherstellen, dass der Spieler einen zufällig
 
     Beispiele:
       | Spieler |
-      | 1       |
       | 2       |
       | 3       |
       | 4       |

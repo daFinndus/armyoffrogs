@@ -39,8 +39,6 @@ public class Bag {
             Frog frog = frogs.get(random.nextInt(frogs.size()));
             frogs.remove(random.nextInt(frogs.size()));
 
-            System.out.println("Frog taken from bag: " + frog.getColor());
-
             return frog;
         }
         return null;
