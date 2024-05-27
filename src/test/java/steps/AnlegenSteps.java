@@ -9,6 +9,8 @@ import de.fhkiel.tsw.Frog;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import steps.container.LogicContainer;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnlegenSteps {
@@ -35,11 +37,11 @@ public class AnlegenSteps {
     public void müssen_alle_bereits_gelegten_spielsteine_und_die_in_seinem_vorrat_seine_teamfarbe_haben() {
         // Festlegen vom zweiten Spieler als aktuellen Spieler
         currentPlayer = container.logic.players()[1];
+        List<Color> frogColors = container.logic.getFrogsInHand(currentPlayer);
 
         // Überprüfen ob alle Frösche im Vorrat die Teamfarbe des aktuellen Spielers haben
-        for (int i = 0; i < container.logic.getFrogsOfPlayer(currentPlayer).length; i++) {
-            Frog frog = container.logic.getFrogsOfPlayer(currentPlayer)[i];
-            Color frogColor = frog.getColor();
+        for (int i = 0; i < container.logic.getFrogsInHand(currentPlayer).size(); i++) {
+            Color frogColor = frogColors.get(i);
 
             /*
             // Das hier wurde benutzt, um das Ergebnis zu simulieren

@@ -48,19 +48,25 @@ public class Gamelogic implements Game {
         return null;
     }
 
+    // Funktion um einen Frosch zur Hand hinzuzufügen
     public void addFrogToHand(Color spieler, Frog frog) {
         playerFrogs.computeIfAbsent(spieler, k -> new ArrayList<>()).add(frog);
     }
 
-    // Das funktioniert noch nicht ganz
-    public Frog[] getFrogsOfPlayer(Color spieler) {
-        List<Frog> frogs = playerFrogs.getOrDefault(spieler, Collections.emptyList()); // Korrigierte Variable
-        return frogs.toArray(new Frog[0]);
+    // Funktion um einen Frosch zu entfernen
+    public void removeFrogFromHand(Color spieler, Frog frog) {
+        playerFrogs.get(spieler).remove(frog);
     }
 
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
-        return null;
+        List<Frog> frogs = playerFrogs.getOrDefault(spieler, Collections.emptyList()); // Korrigierte Variable
+        List<Color> colors = new ArrayList<>();
+
+        for (Frog frog : frogs) {
+            colors.add(frog.getColor());
+        }
+        return colors;
     }
 
 

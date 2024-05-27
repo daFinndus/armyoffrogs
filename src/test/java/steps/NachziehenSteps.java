@@ -70,7 +70,7 @@ public class NachziehenSteps {
 
     @Dann("muss die Anzahl der Spielsteine in seinem Vorrat {int} betragen")
     public void muss_die_anzahl_der_spielsteine_in_seinem_vorrat_betragen(Integer anzahl) {
-        int frogsInHand = container.logic.getFrogsOfPlayer(currentPlayer).length;
+        int frogsInHand = container.logic.getFrogsInHand(currentPlayer).size();
 
         assertThat(frogsInHand).isEqualTo(anzahl);
     }
