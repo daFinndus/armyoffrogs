@@ -4,10 +4,13 @@ import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Position;
 
 /**
- * Frog.
+ * Dies ist die Klasse Frog, die einen Frosch repräsentiert.
+ * Ein Frosch hat eine Farbe und eine Position.
  */
 public class Frog {
+
   private Color color;
+
   private Position position;
 
   public Frog(Color color, Position position) {

@@ -3,17 +3,13 @@ package de.fhkiel.tsw;
 import de.fhkiel.tsw.armyoffrogs.Color;
 
 /**
- * Gameround.
+ * Dies ist die Klasse Gameround, die die Spielrunde repräsentiert.
+ * Sie enthält die Logik für das Beenden eines Zuges.
+ * Außerdem speichert sie den aktuellen Spieler und die aktuelle Runde.
  */
 
 public class Gameround {
-  /**
-   * round: int.
-   */
   private int round = 0;
-  /**
-   * currentPlayer: Color.
-   */
   private Color currentPlayer;
 
   // Funktion für das Beenden eines Zuges
