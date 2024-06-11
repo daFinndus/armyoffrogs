@@ -49,3 +49,18 @@ jar {
         into('META-INF/services')
     }
 }
+
+sourceSets {
+    test {
+        resources {
+            srcDirs += ['src/test/resources/features']
+        }
+    }
+}
+
+task cucumberTest(type: Test) {
+    description = 'Runs Cucumber tests'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
+

@@ -14,4 +14,4 @@ automated-tests-execution:
   script:
     - mkdir -p $TESTS_FOLDER/output
     - cd $TESTS_FOLDER
-    - gradle test
+    - gradle cucumberTest
