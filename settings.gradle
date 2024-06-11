@@ -1,2 +1,3 @@
 rootProject.name = 'Venom'
 
+include 'src:test:resources:features'
