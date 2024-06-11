@@ -13,5 +13,4 @@ automated-tests-execution:
     expire_in: 1 week
   script:
     - mkdir -p $TESTS_FOLDER/output
-    - cd $TESTS_FOLDER
     - gradle cucumberTest
