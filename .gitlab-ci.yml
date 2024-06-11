@@ -5,7 +5,7 @@ automated-tests-execution:
   stage: test-execution
   image: gradle:latest
   variables:
-    TESTS_FOLDER: "/src/test/resources/features"
+    TESTS_FOLDER: "src/test/resources/features"
   artifacts:
     paths:
       - $TESTS_FOLDER/output/
