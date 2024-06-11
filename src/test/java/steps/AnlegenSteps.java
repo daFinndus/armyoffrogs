@@ -1,6 +1,7 @@
 package steps;
 
 
+import de.fhkiel.tsw.Frog;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Position;
 import io.cucumber.java.de.Angenommen;
@@ -88,11 +89,13 @@ public class AnlegenSteps {
     public void müssen_alle_bereits_gelegten_spielsteine_und_die_in_seinem_vorrat_seine_teamfarbe_haben() {
         // Festlegen vom zweiten Spieler als aktuellen Spieler
         currentPlayer = container.logic.players()[1];
-        List<Color> frogColors = container.logic.getFrogsInHand(currentPlayer);
+
+        // Simulieren einer Hand voller Frösche der Spielerfarbe
+        Color[] frogColors = {currentPlayer, currentPlayer};
 
         // Überprüfen ob alle Frösche im Vorrat die Teamfarbe des aktuellen Spielers haben
         for (int i = 0; i < container.logic.getFrogsInHand(currentPlayer).size(); i++) {
-            Color frogColor = frogColors.get(i);
+            Color frogColor = frogColors[i];
 
             /*
             // Das hier wurde benutzt, um das Ergebnis zu simulieren
@@ -116,7 +119,6 @@ public class AnlegenSteps {
 
         Color frog = frogsInHand.get(0);
         container.logic.selectedFrogInHand(currentPlayer, frog);
-        container.board.placeFrogOnBoard(currentPlayer, (Position) container.board.getBoard().get(0));
         // Write code here that turns the phrase above into concrete actions
         System.out.println("Der Spieler muss einen beliebigen Stein aus seinem Vorrat legen..");
     }

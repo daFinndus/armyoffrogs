@@ -9,12 +9,10 @@ public class LogicContainer {
     public Gamelogic logic;
     public Gameround round;
     public Bag bag;
-    public Board board;
 
     public LogicContainer() {
         logic = new Gamelogic();
         round = new Gameround();
-        board = new Board();
 
         System.out.println(getClass().getName());
     }

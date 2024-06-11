@@ -21,16 +21,20 @@ import java.util.Set;
  */
 public class Gamelogic implements Game {
 
+    // Das ist die Variable für die Spielerliste und für die Spielerfrösche
     private Color[] players = new Color[0];
     private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
 
+    // Das sind die Variablen für das Spielbrett und den Beutel
     Set<Position> board = new HashSet<>();
     public Bag bag = new Bag();
 
+    // Die Variablen werden genutzt, um den Spielstatus zu speichern
     boolean gameRunning = false;
     boolean gameStarted = false;
 
-    Color currentPlayer;
+    // Die Variable wird genutzt, um den aktuellen Spieler zu speichern
+    private Color currentPlayer;
 
     @Override
     public boolean newGame(int spieler) {
@@ -87,6 +91,8 @@ public class Gamelogic implements Game {
     public void resetGame() {
         System.out.println("resetGame() ausgeführt.");
 
+        currentPlayer = null;
+
         players = new Color[0];
         playerFrogs = new HashMap<>();
 
@@ -95,9 +101,6 @@ public class Gamelogic implements Game {
 
         gameRunning = false;
         gameStarted = false;
-
-        currentPlayer = players[0];
-
     }
 
     @Override
@@ -114,7 +117,9 @@ public class Gamelogic implements Game {
 
     // Funktion um einen Frosch zur Hand hinzuzufügen
     public void addFrogToHand(Color spieler, Frog frog) {
-        playerFrogs.computeIfAbsent(spieler, k -> new ArrayList<>()).add(frog);
+        List<Frog> frogs = playerFrogs.getOrDefault(spieler, new ArrayList<>());
+
+        playerFrogs.put(spieler, frogs);
     }
 
     /**
@@ -163,7 +168,6 @@ public class Gamelogic implements Game {
 
         // Führe folgende Schritte nur aus, wenn das Spiel läuft
         if (gameRunning) {
-            currentPlayer = players[0];
             // Überprüfen, ob die Position auf dem Spielfeld liegt
             if (position.x() < -50 || position.x() >= 50 || position.y() < -50 || position.y() >= 50) {
                 throw new IllegalArgumentException("Position außerhalb des Spielfelds");
@@ -186,8 +190,12 @@ public class Gamelogic implements Game {
 
             board.add(frogPosition);
 
+            // Frosch aus der Hand entfernen
+            removeFrogFromHand(currentPlayer, 0);
+
             // Frosch aus dem Beutel nehmen
-            takeFrogFromBag();
+            Frog takenFrog = takeFrogFromBag();
+            addFrogToHand(currentPlayer, takenFrog);
         }
     }
 
@@ -242,10 +250,17 @@ public class Gamelogic implements Game {
             players = Arrays.copyOfRange(Color.values(), 0, spieler);
             gameStarted = true;
         }
+
+        // Reload the frogsInHand for the gui
+        for (Color player : players) {
+            getFrogsInHand(player);
+        }
+
+        currentPlayer = players[0];
     }
 
     public Frog takeFrogFromBag() {
-
+        System.out.println("takeFrogFromBag() ausgeführt.");
         return bag.takeFrog();
     }
 
