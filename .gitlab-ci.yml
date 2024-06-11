@@ -3,9 +3,9 @@ stages:
 
 automated-tests-execution:
   stage: test-execution
-  image: node:latest
+  image: gradle:latest
   variables:
-    TESTS_FOLDER: "./automated-tests"
+    TESTS_FOLDER: "/src/test/resources/features"
   artifacts:
     paths:
       - $TESTS_FOLDER/output/
@@ -13,4 +13,4 @@ automated-tests-execution:
     expire_in: 1 week
   script:
     - cd $TESTS_FOLDER
-    - yarn cucumber-js -p test features/
+    - gradle test
