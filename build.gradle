@@ -50,6 +50,7 @@ jar {
     }
 }
 
+
 sourceSets {
     test {
         resources {

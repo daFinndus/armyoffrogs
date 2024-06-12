@@ -4,6 +4,5 @@ Funktionalität: Das System muss sicherstellen, dass der Startspieler das Spiel 
 
   Szenario: Der Startspieler möchte den ersten Stein legen um das Spiel zu beginnen
     Angenommen das Spiel ist mit 2 Spielern gestartet
-    Und die Spielerfarben wurden vergeben
     Wenn der Startspieler festgelegt wurde
-    Dann muss dieser einen beliebigen Stein aus seinem Vorrat legen
+    Dann kann dieser einen beliebigen Stein aus seinem Vorrat legen

@@ -4,14 +4,8 @@ import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Game;
 import de.fhkiel.tsw.armyoffrogs.Position;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Die Gamelogic Klasse implementiert die Spiellogik für das Spiel "Army of Frogs".
@@ -23,11 +17,16 @@ public class Gamelogic implements Game {
 
     // Das ist die Variable für die Spielerliste und für die Spielerfrösche
     private Color[] players = new Color[0];
-    private Map<Color, List<Frog>> playerFrogs = new HashMap<>();
+    private Map<Color, List<Frog>> playerFrogs = new EnumMap<>(Color.class);
+    private Map<Color, Color> selectedPlayerFrog = new EnumMap<>(Color.class);
 
     // Das sind die Variablen für das Spielbrett und den Beutel
     Set<Position> board = new HashSet<>();
+
     public Bag bag = new Bag();
+    public Gameround round = new Gameround();
+
+    private Rules rules = new Rules();
 
     // Die Variablen werden genutzt, um den Spielstatus zu speichern
     boolean gameRunning = false;
@@ -36,6 +35,10 @@ public class Gamelogic implements Game {
     // Die Variable wird genutzt, um den aktuellen Spieler zu speichern
     private Color currentPlayer;
 
+    // Die Variablen werden für die Lognachricht und den Logger genutzt
+    private static final String LOG_HELPER = ") ausgefuehrt.";
+    private static final System.Logger LOGGER = System.getLogger("Gamelogic");
+
     @Override
     public boolean newGame(int spieler) {
         try {
@@ -43,31 +46,24 @@ public class Gamelogic implements Game {
                 resetGame();
             }
         } catch (Exception e) {
-            System.out.println("Fehler beim Zurücksetzen des Spiels: " + e);
+            LOGGER.log(System.Logger.Level.ERROR, "Fehler beim Zurücksetzen des Spiels: " + e);
         }
 
-        System.out.println("newGame(" + spieler + ") ausgeführt.");
-        // Check if the number of players is allowed
+        LOGGER.log(System.Logger.Level.INFO, "newGame(" + spieler + LOG_HELPER);
+
+        // Überprüfen, ob die Anzahl der Spieler gültig ist
         if (2 <= spieler && spieler <= 4) {
-            players = new Color[spieler];
+            players = Arrays.copyOfRange(Color.values(), 0, spieler);
 
-            // Set the players
+            // Setzen der Spieler und Frösche im Beutel
             try {
-                // Fill the players array with the colors of the players
-                Color[] colorOrder = {Color.Red, Color.Green, Color.Blue, Color.White};
-                players = Arrays.copyOfRange(colorOrder, 0, spieler);
-            } catch (Exception e) {
-                System.out.println("Fehler beim Setzen der Spieler: " + e);
-            }
-
-            try {
-                for (int i = 0; i < players.length; i++) {
+                for (Color player : players) {
                     for (int j = 0; j < 10; j++) {
-                        bag.putFrog(new Frog(players[i], null));
+                        bag.putFrog(new Frog(player, null));
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Fehler beim Befüllen des Beutels: " + e);
+                LOGGER.log(System.Logger.Level.ERROR, "Fehler beim Befüllen des Beutels: " + e);
             }
 
             // Change necessary variables
@@ -89,15 +85,16 @@ public class Gamelogic implements Game {
      * Schließlich setzt sie den aktuellen Spieler auf den ersten Spieler in der Spielerliste zurück.
      */
     public void resetGame() {
-        System.out.println("resetGame() ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "resetGame(" + LOG_HELPER);
 
         currentPlayer = null;
 
         players = new Color[0];
-        playerFrogs = new HashMap<>();
+        playerFrogs.clear();
+        board.clear();
 
-        board = new HashSet<>();
         bag = new Bag();
+        round = new Gameround();
 
         gameRunning = false;
         gameStarted = false;
@@ -105,20 +102,24 @@ public class Gamelogic implements Game {
 
     @Override
     public Color[] players() {
-        System.out.println("players() ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "players(" + LOG_HELPER);
         return players;
     }
 
     @Override
     public String getInfo() {
-        System.out.println("getInfo() ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "getInfo(" + LOG_HELPER);
         return "Das ist das Venom Projekt von Finn, Jonas und Darren!";
     }
 
-    // Funktion um einen Frosch zur Hand hinzuzufügen
+    /**
+     * Diese Methode fügt einen Frosch einer bestimmten Farbe dem Vorrat eines Spielers hinzu
+     *
+     * @param spieler
+     */
     public void addFrogToHand(Color spieler, Frog frog) {
         List<Frog> frogs = playerFrogs.getOrDefault(spieler, new ArrayList<>());
-
+        frogs.add(frog);
         playerFrogs.put(spieler, frogs);
     }
 
@@ -138,13 +139,16 @@ public class Gamelogic implements Game {
 
     @Override
     public List<Color> getFrogsInHand(Color spieler) {
-        System.out.println("getFrogsInHand(" + spieler + ") ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "getFrogsInHand(" + spieler + LOG_HELPER);
         List<Frog> frogs = playerFrogs.getOrDefault(spieler, Collections.emptyList()); // Korrigierte Variable
         List<Color> colors = new ArrayList<>();
 
         for (Frog frog : frogs) {
-            colors.add(frog.getColor());
-            System.out.println("Frosch: " + frog.getColor());
+            if (frog != null) {
+                colors.add(frog.getColor());
+            } else {
+                colors.add(Color.Black);
+            }
         }
         return colors;
     }
@@ -153,72 +157,152 @@ public class Gamelogic implements Game {
     @Override
     public Set<Position> getBoard() {
         if (!gameStarted && gameRunning) {
-            startGame(players().length);
+            startGame(players.length);
             gameStarted = true;
         }
 
-        System.out.println("getBoard() ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "getBoard(" + LOG_HELPER);
 
         return board;
     }
 
     @Override
     public void clicked(Position position) {
-        System.out.println("clicked(" + position + ") ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "clicked(" + position + LOG_HELPER);
 
         // Führe folgende Schritte nur aus, wenn das Spiel läuft
         if (gameRunning) {
-            // Überprüfen, ob die Position auf dem Spielfeld liegt
-            if (position.x() < -50 || position.x() >= 50 || position.y() < -50 || position.y() >= 50) {
-                throw new IllegalArgumentException("Position außerhalb des Spielfelds");
-            }
+            // Überprüfe, ob die Position regelrecht ist
+            rules.validateClick(position, getFrogsInHand(currentPlayer));
 
-            // Überprüfen, ob die Position bereits von einem anderen Frosch besetzt ist
-            if (board.contains(position)) {
-                throw new IllegalArgumentException("Position bereits besetzt");
-            }
+            Color frog = selectedPlayerFrog.getOrDefault(currentPlayer, getFrogsInHand(currentPlayer).get(0));
 
-            // Überprüfen, ob der Spieler einen Frosch in der Hand hat
-            if (getFrogsInHand(players[0]).isEmpty()) {
+            if (frog == Color.Black) {
                 throw new IllegalArgumentException("Kein Frosch in der Hand");
             }
 
-            List<Color> frogs = getFrogsInHand(players[0]);
-            Color frog = frogs.get(0);
+            // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
+            placeFrog(position, frog);
 
-            Position frogPosition = new Position(frog, position.x(), position.y(), Color.None);
-
-            board.add(frogPosition);
-
-            // Frosch aus der Hand entfernen
-            removeFrogFromHand(currentPlayer, 0);
-
-            // Frosch aus dem Beutel nehmen
-            Frog takenFrog = takeFrogFromBag();
-            addFrogToHand(currentPlayer, takenFrog);
+            // Beendet den Zug des aktuellen Spielers
+            endTurn();
         }
+    }
+
+
+    /**
+     * Die Methode markiert einen Frosch auf dem Spielfeld.
+     * Das wird relevant, wenn man zum Beispiel Frösche bewegen möchte.
+     *
+     * @param position Die Position des Frosches, der markiert werden soll.
+     */
+    public void highlightFrog(Position position) {
+        LOGGER.log(System.Logger.Level.INFO, "highlightFrog(" + position + LOG_HELPER);
+
+        Set<Position> newBoard = new HashSet<>();
+
+        // Sicherstellen, dass die Position bereits besetzt ist von einem Frosch der Teamfarbe
+        for (Position pos : board) {
+            if (pos.equals(position) && pos.frog() == currentPlayer) {
+                newBoard.add(new Position(pos.frog(), pos.x(), pos.y(), Color.Black));
+            } else {
+                newBoard.add(new Position(pos.frog(), pos.x(), pos.y(), Color.None));
+            }
+        }
+        board = newBoard;
+    }
+
+
+    /**
+     * Diese Methode findet heraus, falls es ein Highlight auf der Map gibt und wo.
+     *
+     * @return Die Position des Highlights.
+     */
+    public Set<Position> getHighlight() {
+        LOGGER.log(System.Logger.Level.INFO, "getHighlight(" + LOG_HELPER);
+
+        Set<Position> highlightedPositions = new HashSet<>();
+
+        for (Position pos : board) {
+            if (pos.border() == Color.Black) {
+                highlightedPositions.add(pos);
+                break;
+            }
+        }
+        return highlightedPositions;
+    }
+
+    /**
+     * Diese Methode bewegt einen Frosch auf dem Spielfeld.
+     *
+     * @param from Die Position, von der der Frosch bewegt wird.
+     * @param to   Die Position, zu der der Frosch bewegt wird.
+     */
+    private void moveFrog(Position from, Position to) {
+        // Hier fehlt noch eine Implementation
+    }
+
+
+    /**
+     * Diese Methode dient dem Platzieren eines Frosches auf dem Spielfeld.
+     *
+     * @param position Die Position, an der der Frosch platziert werden soll.
+     * @param frog     Die Farbe des Frosches, der platziert werden soll.
+     */
+    public void placeFrog(Position position, Color frog) {
+        LOGGER.log(System.Logger.Level.INFO, "placeFrog(" + position + ", " + frog + LOG_HELPER);
+
+        // Erschaffen einer Liste an Farben, die überprüft werden soll
+        List<Color> availableColors = new ArrayList<>();
+        availableColors.add(currentPlayer);
+
+        // Hinzufügen der Frösche aus dem Vorrat
+        for (Color color : getFrogsInHand(currentPlayer)) {
+            availableColors.add(color);
+        }
+
+        // Überprüfen, ob nur solche Farben auf dem Spielfeld sind
+        if (rules.allFrogsAreColor(availableColors, board)) {
+            endTurn();
+            throw new IllegalArgumentException("Es sind nur Frösche der eigenen Farbe auf dem Spielfeld");
+        }
+
+        rules.validatePlace(position, frog, currentPlayer, board);
+
+        Position frogPosition = new Position(frog, position.x(), position.y(), Color.None);
+        board.add(frogPosition);
+
+        // Frosch aus der Hand entfernen
+        removeFrogFromHand(currentPlayer, 0);
+
+        // Frosch aus dem Beutel nehmen
+        addFrogToHand(currentPlayer, takeFrogFromBag());
     }
 
     @Override
     public void selectedFrogInHand(Color spieler, Color frog) {
-        System.out.println("selectedFrogInHand(" + spieler + ", " + frog + ") ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "selectedFrogInHand(" + spieler + ", " + frog + LOG_HELPER);
+
+        if (frog != Color.Black) {
+            selectedPlayerFrog.put(spieler, frog);
+        }
     }
 
     @Override
     public Color winner() {
-        System.out.println("winner() ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "winner() ausgefuehrt.");
         return null;
     }
 
     @Override
     public boolean save(String filename) {
-        System.out.println("save(" + filename + ") ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "save(" + filename + LOG_HELPER);
         return false;
     }
 
     @Override
     public boolean load(String filename) {
-        System.out.println("load(" + filename + ") ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "load(" + filename + LOG_HELPER);
         return false;
     }
 
@@ -236,16 +320,15 @@ public class Gamelogic implements Game {
      * @param spieler Die Anzahl der Spieler, die am Spiel teilnehmen.
      */
     public void startGame(int spieler) {
-        if (spieler != 0) {
-            System.out.println("startGame(" + spieler + ") ausgeführt.");
+        if (spieler > 0) {
+            LOGGER.log(System.Logger.Level.INFO, "startGame(" + spieler + LOG_HELPER);
+
             // Jeweils zwei Frösche pro Spieler werden zu Beginn aus dem Beutel genommen
             for (int i = 0; i < spieler; i++) {
                 for (int j = 0; j < 2; j++) {
-                    Frog frog = bag.takeFrog();
-                    addFrogToHand(players[i], frog);
+                    addFrogToHand(players[i], bag.takeFrog());
                 }
             }
-
 
             players = Arrays.copyOfRange(Color.values(), 0, spieler);
             gameStarted = true;
@@ -259,8 +342,13 @@ public class Gamelogic implements Game {
         currentPlayer = players[0];
     }
 
+    /**
+     * Die Methode entfernt einen Frosch aus dem Beutel.
+     *
+     * @return
+     */
     public Frog takeFrogFromBag() {
-        System.out.println("takeFrogFromBag() ausgeführt.");
+        LOGGER.log(System.Logger.Level.INFO, "takeFrogFromBag(" + LOG_HELPER);
         return bag.takeFrog();
     }
 
@@ -271,10 +359,17 @@ public class Gamelogic implements Game {
      * @param color Die Farbe des Frosches, der in den Beutel gelegt wird.
      */
     public void putFrogIntoBag(Color color) {
-        Frog frog = new Frog(color, null);
-
-        bag.putFrog(frog);
+        bag.putFrog(new Frog(color, null));
     }
 
-
+    /**
+     * Diese Methode beendet den Zug des aktuellen Spielers.
+     * Dabei wird die Methode von Gameround genutzt.
+     */
+    public void endTurn() {
+        // Setze den nächsten Spieler und clear die selectedPlayerFrog Map
+        selectedPlayerFrog.clear();
+        currentPlayer = round.endTurn(currentPlayer, players);
+        LOGGER.log(System.Logger.Level.INFO, "Der aktuelle Spieler ist nun: " + currentPlayer);
+    }
 }

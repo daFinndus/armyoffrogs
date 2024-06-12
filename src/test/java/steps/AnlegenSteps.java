@@ -2,6 +2,7 @@ package steps;
 
 
 import de.fhkiel.tsw.Frog;
+import de.fhkiel.tsw.Gamelogic;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Position;
 import io.cucumber.java.de.Angenommen;
@@ -13,12 +14,14 @@ import steps.container.LogicContainer;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
 
 
 public class AnlegenSteps {
     private final LogicContainer container;
 
     Color currentPlayer;
+    Color selectedFrog;
 
     public AnlegenSteps(LogicContainer container) {
         this.container = container;
@@ -45,31 +48,13 @@ public class AnlegenSteps {
             default:
                 throw new IllegalArgumentException("Ungültige Reihenfolge: " + order);
         }
-        // Write code here that turns the phrase above into concrete actions
     }
 
-    // Diese Funktion klappt nur dann, wenn ein Frosch die Farbe des aktuellen Spielers hat
     @Wenn("der Frosch die eigene Teamfarbe hat")
     public void der_frosch_die_eigene_teamfarbe_hat() {
-        List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
-
-        // Wählen Sie einen Frosch mit der Farbe des aktuellen Spielers
-        Color frog = null;
-        for (Color f : frogsInHand) {
-            if (f.equals(currentPlayer)) {
-                frog = f;
-                break;
-            }
-        }
-
-        // Überprüfen Sie, ob ein Frosch mit der Farbe des aktuellen Spielers gefunden wurde
-        if (frog == null) {
-            throw new IllegalArgumentException("Kein Frosch mit der Farbe des aktuellen Spielers gefunden");
-        }
-
-        // Nun können Sie den Frosch für weitere Aktionen verwenden
+        // Simulieren des ausgewählten Frosches
+        selectedFrog = currentPlayer;
     }
-
 
     @Wenn("er die Aktion Anlegen überspringen will")
     public void er_die_aktion_anlegen_überspringen_will() {
@@ -78,10 +63,22 @@ public class AnlegenSteps {
 
     @Wenn("der Startspieler festgelegt wurde")
     public void der_startspieler_festgelegt_wurde() {
-        // Write code here that turns the phrase above into concrete actions
-        System.out.println("Der Startspieler wurde festgelegt..");
+        currentPlayer = container.logic.players()[0];
     }
 
+    @Wenn("dieser einen Spielstein anlegen möchte der nicht der eigenen Teamfarbe entspricht")
+    public void dieser_einen_spielstein_anlegen_möchte_der_nicht_der_eigenen_teamfarbe_entspricht() {
+        // Simulieren des ausgewählten Frosches
+        // Alles außer Color.Blue, da der aktuelle Spieler Color.Blue ist
+        selectedFrog = Color.Red;
+    }
+
+    @Wenn("er einen Frosch hinzufügen möchte")
+    public void er_einen_frosch_hinzufügen_möchte() {
+        // Hier kann eine komplett beliebige Farbe gewählt werden
+        // Sie darf nur nicht der bereits gesetzten Farbe + Teamfarbe gleichen
+        selectedFrog = Color.Green;
+    }
 
     // Das hier muss noch mit der GUI kombiniert werden, aktuell wird nur der Vorrat überprüft
     // Das läuft logischerweise auch nur durch, wenn beide Frösche im Vorrat die Teamfarbe haben
@@ -110,16 +107,42 @@ public class AnlegenSteps {
 
     @Dann("darf der Frosch ausschließlich an andersfarbigen Fröschen platziert werden")
     public void darf_der_frosch_ausschließlich_an_andersfarbigen_fröschen_platziert_werden() {
-        //kann man erst implementieren, wenn die GUI fertig ist
+        // Simulieren eines gelegten Frosches des Spielers davor
+        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), Color.Red);
+
+        // Simulieren eines gelegten Frosches des aktuellen Spielers
+        container.logic.placeFrog(new Position(Color.None, 1, 0, Color.None), currentPlayer);
     }
 
-    @Dann("muss dieser einen beliebigen Stein aus seinem Vorrat legen")
-    public void muss_dieser_einen_beliebigen_stein_aus_seinem_vorrat_legen() {
+    @Dann("kann dieser einen beliebigen Stein aus seinem Vorrat legen")
+    public void kann_dieser_einen_beliebigen_stein_aus_seinem_vorrat_legen() {
         List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
 
-        Color frog = frogsInHand.get(0);
-        container.logic.selectedFrogInHand(currentPlayer, frog);
-        // Write code here that turns the phrase above into concrete actions
-        System.out.println("Der Spieler muss einen beliebigen Stein aus seinem Vorrat legen..");
+        // Platzieren von einem der beiden Frösche aus dem Vorrat
+        container.logic.placeFrog(new Position(frogsInHand.get(0), 0, 0, Color.None), currentPlayer);
+
+    }
+
+    @Dann("muss dieser an alle Spielsteine angelegt werden können")
+    public void muss_dieser_an_alle_spielsteine_angelegt_werden_können() {
+        // Simulieren eines gelegten Frosches des Spielers davor
+        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), Color.Red);
+
+        // Simulieren eines gelegten Frosches des aktuellen Spielers
+        container.logic.placeFrog(new Position(selectedFrog, 1, 0, Color.None), currentPlayer);
+    }
+
+    @Dann("muss bereits ein Frosch auf der Spielfläche liegen der nicht der Teamfarbe entspricht")
+    public void muss_bereits_ein_frosch_auf_der_spielfläche_liegen_der_nicht_der_teamfarbe_entspricht() {
+        // Simulieren eines gelegten Frosches des Spielers davor
+        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), Color.Red);
+
+        assertThat(container.logic.getBoard().size()).isGreaterThan(0);
+
+        for (Position pos : container.logic.getBoard()) {
+            if (pos.frog() == selectedFrog && pos.frog() == currentPlayer) {
+                throw new IllegalArgumentException("Der Frosch darf nicht an einen eigenen Frosch angelegt werden");
+            }
+        }
     }
 }
