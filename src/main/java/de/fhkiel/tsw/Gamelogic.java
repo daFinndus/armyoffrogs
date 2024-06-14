@@ -5,7 +5,6 @@ import de.fhkiel.tsw.armyoffrogs.Game;
 import de.fhkiel.tsw.armyoffrogs.Position;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Die Gamelogic Klasse implementiert die Spiellogik für das Spiel "Army of Frogs".
@@ -195,8 +194,9 @@ public class Gamelogic implements Game {
      * Das wird relevant, wenn man zum Beispiel Frösche bewegen möchte.
      *
      * @param position Die Position des Frosches, der markiert werden soll.
+     * @return
      */
-    public void highlightFrog(Position position) {
+    public Position highlightFrog(Position position) {
         LOGGER.log(System.Logger.Level.INFO, "highlightFrog(" + position + LOG_HELPER);
 
         Set<Position> newBoard = new HashSet<>();
@@ -210,6 +210,7 @@ public class Gamelogic implements Game {
             }
         }
         board = newBoard;
+        return position;
     }
 
 
@@ -235,13 +236,65 @@ public class Gamelogic implements Game {
     /**
      * Diese Methode bewegt einen Frosch auf dem Spielfeld.
      *
-     * @param from Die Position, von der der Frosch bewegt wird.
      * @param to   Die Position, zu der der Frosch bewegt wird.
      */
-    private void moveFrog(Position from, Position to) {
-        // Hier fehlt noch eine Implementation
+    public void moveFrog(Position to) {
+        LOGGER.log(System.Logger.Level.INFO, "moveFrog(" + to + LOG_HELPER);
+
+
+        // Finden Sie den Frosch an der Ausgangsposition
+        Position from = highlightFrog(to);
+        if (from == null) {
+            throw new IllegalArgumentException("Kein Frosch ausgewählt");
+        }
+
+        // Überprüfen Sie, ob die Ausgangs- und Zielposition gleich sind
+        if (from.equals(to)) {
+            throw new IllegalArgumentException("Die Zielposition darf nicht die Ausgangsposition sein");
+        }
+
+        // Überprüfen Sie, ob die Bewegung eine Position zwischen zwei Fröschen freilassen würde
+        if (isLeavingOpenPosition(to)) {
+            throw new IllegalArgumentException("Eine Bewegung darf keine Position zwischen zwei Fröschen freilassen");
+        }
+
+        // Entfernen Sie den Frosch von der Ausgangsposition
+        board.remove(from);
+
+        // Fügen Sie einen neuen Frosch an der Zielposition hinzu
+        Position newPosition = new Position(from.frog(), to.x(), to.y(), Color.None);
+        board.add(newPosition);
     }
 
+    private boolean isLeavingOpenPosition( Position to) {
+        Position from = highlightFrog(to);
+        // Überprüfen Sie die Positionen um die Ausgangsposition herum
+        for (Position pos : getSurroundingPositions(from)) {
+            // Wenn eine der umliegenden Positionen einen Frosch enthält und nicht die Zielposition ist
+            if (!pos.equals(to) && pos.frog() != null) {
+                // Überprüfen Sie die Positionen um diese Position herum
+                for (Position pos2 : getSurroundingPositions(pos)) {
+                    // Wenn eine der umliegenden Positionen einen Frosch enthält und nicht die Ausgangsposition ist
+                    if (!pos2.equals(from) && pos2.frog() != null) {
+                        // Es gibt zwei Frösche um die Ausgangsposition herum, also würde die Bewegung eine Position freilassen
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // Es gibt keine zwei Frösche um die Ausgangsposition herum, also würde die Bewegung keine Position freilassen
+        return false;
+    }
+
+    private List<Position> getSurroundingPositions(Position position) {
+        List<Position> surroundingPositions = new ArrayList<>();
+
+        // Fügen Sie die Positionen um die gegebene Position herum zur Liste hinzu
+        // Sie müssen die Logik implementieren, um die umliegenden Positionen basierend auf Ihrem Spielbrett zu bestimmen
+
+        return surroundingPositions;
+    }
 
     /**
      * Diese Methode dient dem Platzieren eines Frosches auf dem Spielfeld.

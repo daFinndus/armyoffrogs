@@ -11,7 +11,7 @@ public class Frog {
 
   private Color color;
 
-  private Position position;
+  public static Position position;
 
   public Frog(Color color, Position position) {
     this.color = color;
@@ -23,7 +23,7 @@ public class Frog {
     return color;
   }
 
-  public Position getPosition() {
+  public static Position getPosition() {
     return position;
   }
 
