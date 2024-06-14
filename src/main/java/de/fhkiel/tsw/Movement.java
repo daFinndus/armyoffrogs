@@ -13,6 +13,7 @@ import static de.fhkiel.tsw.Frog.position;
 
 public class Movement extends Gamelogic {
 
+    private Position highlightedPosition;
     /**
      * Die Methode markiert einen Frosch auf dem Spielfeld.
      * Das wird relevant, wenn man zum Beispiel Frösche bewegen möchte.
@@ -29,12 +30,13 @@ public class Movement extends Gamelogic {
         for (Position pos : board) {
             if (pos.equals(position) && pos.frog() == currentPlayer) {
                 newBoard.add(new Position(pos.frog(), pos.x(), pos.y(), Color.Black));
+                highlightedPosition = pos;
             } else {
                 newBoard.add(new Position(pos.frog(), pos.x(), pos.y(), Color.None));
             }
         }
         board = newBoard;
-        return position;
+        return highlightedPosition;
     }
 
 
@@ -47,9 +49,6 @@ public class Movement extends Gamelogic {
         LOGGER.log(System.Logger.Level.INFO, "getHighlight(" + LOG_HELPER);
 
         Set<Position> highlightedPositions = new HashSet<>();
-
-        // Aufruf der highlightFrog Methode und Speichern der zurückgegebenen Position
-        Position highlightedPosition = highlightFrog(position);
 
         for (Position pos : board) {
             if (pos.equals(highlightedPosition)) {
@@ -91,6 +90,8 @@ public class Movement extends Gamelogic {
         // Fügen Sie einen neuen Frosch an der Zielposition hinzu
         Position newPosition = new Position(from.frog(), to.x(), to.y(), Color.None);
         board.add(newPosition);
+
+        highlightedPosition = null;
     }
 
     private boolean isLeavingOpenPosition( Position to) {
