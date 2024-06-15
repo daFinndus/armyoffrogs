@@ -1,7 +1,6 @@
 package de.fhkiel.tsw;
 
-public enum GamePhase {
+public enum Gamephase {
     MOVE_FROG,
     PLACE_FROG,
-    TAKE_FROG_FROM_BAG
 }

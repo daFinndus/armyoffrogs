@@ -2,6 +2,8 @@ package de.fhkiel.tsw;
 
 import de.fhkiel.tsw.armyoffrogs.Color;
 
+import java.util.logging.Logger;
+
 /**
  * Dies ist die Klasse Gameround, die die Spielrunde repräsentiert.
  * Sie enthält die Logik für das Beenden eines Zuges.
@@ -9,7 +11,7 @@ import de.fhkiel.tsw.armyoffrogs.Color;
  */
 public class Gameround {
     private int round = 0;
-    private Color currentPlayer;
+    private Color currentPlayer = Color.Red;
 
 
     /**
@@ -45,6 +47,11 @@ public class Gameround {
 
     // Getter for currentPlayer, if needed
     public Color getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public Color setCurrentPlayer(Color currentPlayer) {
+        this.currentPlayer = currentPlayer;
         return currentPlayer;
     }
 

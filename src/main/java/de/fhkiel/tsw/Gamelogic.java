@@ -6,8 +6,6 @@ import de.fhkiel.tsw.armyoffrogs.Position;
 
 import java.util.*;
 
-import static de.fhkiel.tsw.Frog.position;
-
 /**
  * Die Gamelogic Klasse implementiert die Spiellogik für das Spiel "Army of Frogs".
  * Sie verwaltet den Spielzustand, einschließlich der Spieler, der Frösche und des Spielbretts.
@@ -22,25 +20,27 @@ public class Gamelogic implements Game {
     private Map<Color, Color> selectedPlayerFrog = new EnumMap<>(Color.class);
 
     // Das sind die Variablen für das Spielbrett und den Beutel
-    static Set<Position> board = new HashSet<>();
+    private Set<Position> board = new HashSet<>();
 
-    public Bag bag = new Bag();
-    public Gameround round = new Gameround();
+    private Bag bag = new Bag();
+    private Gameround round = new Gameround();
 
     private Rules rules = new Rules();
+    private Movement movement = new Movement(this);
 
     // Die Variablen werden genutzt, um den Spielstatus zu speichern
     boolean gameRunning = false;
     boolean gameStarted = false;
 
     // Die Variable wird genutzt, um den aktuellen Spieler zu speichern
-    public static Color currentPlayer;
+    // Die andere um die aktuelle Phase zu speichern
+    protected Color currentPlayer;
+    protected Gamephase currentPhase = Gamephase.PLACE_FROG;
 
     // Die Variablen werden für die Lognachricht und den Logger genutzt
     public static final String LOG_HELPER = ") ausgefuehrt.";
     public static final System.Logger LOGGER = System.getLogger("Gamelogic");
 
-    public GamePhase currentPhase;
 
     @Override
     public boolean newGame(int spieler) {
@@ -134,9 +134,13 @@ public class Gamelogic implements Game {
      * @param index   Der Index des Frosches, der aus der Hand des Spielers entfernt wird.
      */
     public void removeFrogFromHand(Color spieler, Integer index) {
+        LOGGER.log(System.Logger.Level.INFO, "removeFrogFromHand(" + spieler + ", " + index + LOG_HELPER);
+
         List<Frog> frogs = playerFrogs.get(spieler);
-        if (frogs != null) {
-            playerFrogs.get(spieler).remove((int) index);
+        if (frogs != null && index != null && index >= 0 && index < frogs.size()) {
+            frogs.remove((int) index);
+        } else {
+            throw new IllegalArgumentException("Frosch konnte nicht aus der Hand entfernt werden");
         }
     }
 
@@ -158,18 +162,6 @@ public class Gamelogic implements Game {
 
 
     @Override
-    public Set<Position> getBoard() {
-        if (!gameStarted && gameRunning) {
-            startGame(players.length);
-            gameStarted = true;
-        }
-
-        LOGGER.log(System.Logger.Level.INFO, "getBoard(" + LOG_HELPER);
-
-        return board;
-    }
-
-    @Override
     public void clicked(Position position) {
         LOGGER.log(System.Logger.Level.INFO, "clicked(" + position + LOG_HELPER);
 
@@ -178,80 +170,66 @@ public class Gamelogic implements Game {
             // Überprüfe, ob die Position regelrecht ist
             rules.validateClick(position, getFrogsInHand(currentPlayer));
 
-            Color frog = selectedPlayerFrog.getOrDefault(currentPlayer, getFrogsInHand(currentPlayer).get(0));
-
-            if (frog == Color.Black) {
-                throw new IllegalArgumentException("Kein Frosch in der Hand");
-            }
-
             switch (currentPhase) {
                 case MOVE_FROG:
-                    // Überprüfen, ob mindestens drei Frösche auf dem Spielfeld sind
-                    if (board.size() < 3) {
-                        throw new IllegalStateException("Es müssen mindestens drei Frösche auf dem Spielfeld sein, bevor ein Spieler einen Frosch bewegen darf");
-                    }
-                    // Überprüfen, ob die Position einen Frosch enthält und ob dieser dem aktuellen Spieler gehört
-                    boolean frogExists = false;
-                    for (Position pos : board) {
-                        if (pos.equals(position) && pos.frog() != null && pos.frog() == currentPlayer) {
-                            frogExists = true;
-                            break;
-                        }
-                    }
-
-                    if (frogExists) {
-                        // Überprüfen, ob der Frosch bereits hervorgehoben ist
-                        Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
-                        if (highlightedFrog != null && highlightedFrog.equals(position)) {
-                            // Wenn der Frosch bereits hervorgehoben ist, entfernen Sie das Highlight
-                            Movement.removeHighlight();
-                        } else {
-                            // Wenn der Frosch nicht hervorgehoben ist, heben Sie ihn hervor
-                            Movement.highlightFrog(position);
-                            currentPhase = GamePhase.MOVE_FROG;
-                        }
+                    if (movement.validateHighlight()) {
+                        moveFrog(position);
                     } else {
-                        Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
-                        if (highlightedFrog != null) {
-                            // Überprüfen, ob die Bewegung gültig ist
-                            if (Movement.isValidMove(highlightedFrog, position)) {
-                                // Bewegen Sie den Frosch
-                                Movement.moveFrog(position);
-                                currentPhase = GamePhase.PLACE_FROG;
-                            } else {
-                                throw new IllegalArgumentException("Ungültige Bewegung");
-                            }
-                        }
+                        movement.highlightPosition(position);
                     }
                     break;
                 case PLACE_FROG:
-                    // Überprüfen, ob das Feld leer ist
-                    boolean fieldIsEmpty = true;
-                    for (Position pos : board) {
-                        if (pos.equals(position) && pos.frog() != null) {
-                            fieldIsEmpty = false;
-                            break;
-                        }
-                    }
-                    if (fieldIsEmpty) {
+                    // Kontrollieren, ob ein Frosch ausgewählt ist, wenn nicht, wird der erste Frosch ausgewählt
+                    Color frog = selectedPlayerFrog.getOrDefault(currentPlayer, getFrogsInHand(currentPlayer).get(0));
 
-                        // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
-                        placeFrog(position, frog);
-                        currentPhase = GamePhase.TAKE_FROG_FROM_BAG;
+                    // Überprüfen, ob man noch Frösche auf der Hand hat
+                    if (frog == Color.Black) {
+                        throw new IllegalArgumentException("Kein Frosch in der Hand");
                     }
-                    break;
-                case TAKE_FROG_FROM_BAG:
-                    addFrogToHand(currentPlayer, bag.takeFrog());
-                    break;
 
+                    placeFrog(position, frog);
+
+                    break;
                 default:
                     throw new IllegalStateException("Ungültige Spielphase: " + currentPhase);
             }
-
-
-            // Beendet den Zug des aktuellen Spielers
-            endTurn();
         }
+    }
+
+    /**
+     * Diese Methode bewegt einen Frosch auf dem Spielfeld.
+     *
+     * @param to Die Position, zu der der Frosch bewegt wird.
+     */
+    public void moveFrog(Position to) {
+        LOGGER.log(System.Logger.Level.INFO, "moveFrog(" + to + LOG_HELPER);
+
+        // Auswählen eines markierten Frosches auf dem Spielfeld
+        Position from = movement.getHighlight().stream().findFirst().orElse(null);
+        LOGGER.log(System.Logger.Level.INFO, "Der Frosch, der bewegt wird, ist: " + from);
+
+        if (from == null) {
+            throw new IllegalArgumentException("Kein Frosch ausgewählt");
+        }
+
+        if (movement.validateBoard()) {
+            currentPhase = Gamephase.PLACE_FROG;
+            throw new IllegalArgumentException("Das Spielfeld besteht nur aus Fröschen anderer Farbe");
+        }
+
+        // Überprüfen, ob die Ausgangs- und Zielposition gleich sind
+        if (!board.remove(from) || from.equals(to)) {
+            throw new IllegalArgumentException("Der Frosch konnte nicht von der Ausgangsposition entfernt werden");
+        }
+
+        // Fügen Sie einen neuen Frosch an der Zielposition hinzu
+        Position newPosition = new Position(from.frog(), to.x(), to.y(), currentPlayer);
+        board.add(newPosition);
+
+        movement.removeHighlight();
+
+        currentPhase = Gamephase.PLACE_FROG;
+        LOGGER.log(System.Logger.Level.INFO, "Die aktuelle Phase ist nun: " + currentPhase);
     }
 
     /**
@@ -282,10 +260,60 @@ public class Gamelogic implements Game {
         board.add(frogPosition);
 
         // Frosch aus der Hand entfernen
-        removeFrogFromHand(currentPlayer, 0);
+        LOGGER.log(System.Logger.Level.INFO, "Der Spieler " + currentPlayer + " hat die Frösche  " + getFrogsInHand(currentPlayer));
+        int index = indexOfFrog(getFrogsInHand(currentPlayer), frog);
+        removeFrogFromHand(currentPlayer, index);
 
         // Frosch aus dem Beutel nehmen
         addFrogToHand(currentPlayer, takeFrogFromBag());
+
+        // Beendet den Zug des aktuellen Spielers
+        endTurn();
+    }
+
+    /**
+     * Diese Methode beendet den Zug des aktuellen Spielers.
+     * Dabei wird die Methode von Gameround genutzt.
+     * Ebenfalls setzt sie, wenn möglich, die Phase auf MOVE_FROG.
+     */
+    public void endTurn() {
+        // Setze den nächsten Spieler und clear die selectedPlayerFrog Map
+        selectedPlayerFrog.clear();
+        currentPlayer = round.endTurn(currentPlayer, players);
+        LOGGER.log(System.Logger.Level.INFO, "Der aktuelle Spieler ist nun: " + currentPlayer);
+
+
+        // If enough frogs are placed, change the phase
+        if (board.size() >= 2) {
+            currentPhase = Gamephase.MOVE_FROG;
+        } else {
+            currentPhase = Gamephase.PLACE_FROG;
+        }
+
+        LOGGER.log(System.Logger.Level.INFO, "Die aktuelle Phase ist nun: " + currentPhase);
+    }
+
+    /**
+     * Diese Methode gibt den Index eines Frosches in einer Liste von Fröschen zurück.
+     *
+     * @param frogsInHand Die Liste der Frösche, in der der Frosch gesucht wird.
+     * @param frog        Der Frosch, der gesucht wird.
+     * @return Der Index des Frosches in der Liste, -1 wenn der Frosch nicht gefunden wurde.
+     */
+    public int indexOfFrog(List<Color> frogsInHand, Color frog) {
+        LOGGER.log(System.Logger.Level.INFO, "indexOfFrog(" + frogsInHand + ", " + frog + LOG_HELPER);
+
+        int indexToRemove = -1;
+
+        for (int i = 0; i < frogsInHand.size(); i++) {
+            if (frogsInHand.get(i) == frog) {
+                indexToRemove = i;
+                break;
+            }
+        }
+
+        LOGGER.log(System.Logger.Level.INFO, "Der Index des Frosches ist: " + indexToRemove);
+        return indexToRemove;
     }
 
     @Override
@@ -341,7 +369,7 @@ public class Gamelogic implements Game {
 
             players = Arrays.copyOfRange(Color.values(), 0, spieler);
             gameStarted = true;
-            currentPhase = GamePhase.PLACE_FROG;
+            currentPhase = Gamephase.PLACE_FROG;
         }
 
         // Reload the frogsInHand for the gui
@@ -372,21 +400,44 @@ public class Gamelogic implements Game {
         bag.putFrog(new Frog(color, null));
     }
 
-    /**
-     * Diese Methode beendet den Zug des aktuellen Spielers.
-     * Dabei wird die Methode von Gameround genutzt.
-     */
-    public void endTurn() {
-        // Setze den nächsten Spieler und clear die selectedPlayerFrog Map
-        selectedPlayerFrog.clear();
-        currentPlayer = round.endTurn(currentPlayer, players);
-        LOGGER.log(System.Logger.Level.INFO, "Der aktuelle Spieler ist nun: " + currentPlayer);
-
-        // Setzen Sie die Phase auf MOVE_FROG am Ende des Zuges, wenn die Runde größer oder gleich 4 ist
-        if (round.getRound() >= 4 && board.size() >= 3) {
-            currentPhase = GamePhase.MOVE_FROG;
-        } else {
-            currentPhase = GamePhase.PLACE_FROG;
+    @Override
+    public Set<Position> getBoard() {
+        if (!gameStarted && gameRunning) {
+            startGame(players.length);
+            gameStarted = true;
         }
+
+        LOGGER.log(System.Logger.Level.INFO, "getBoard is currently: " + board);
+
+        return new HashSet<>(board);
+    }
+
+    public Set<Position> setBoard(Set<Position> board) {
+        this.board = board;
+        return board;
+    }
+
+    public Bag getBag() {
+        return bag;
+    }
+
+    public Gameround getRound() {
+        return round;
+    }
+
+    public Map<Color, List<Frog>> getPlayerFrogs() {
+        return playerFrogs;
+    }
+
+    public Map<Color, List<Frog>> setPlayerFrogs(Map<Color, List<Frog>> playerFrogs) {
+        this.playerFrogs = playerFrogs;
+        return playerFrogs;
+    }
+
+    public Color setCurrentPlayer(Color currentPlayer) {
+        LOGGER.log(System.Logger.Level.INFO, "setCurrentPlayer(" + currentPlayer + LOG_HELPER);
+        this.currentPlayer = currentPlayer;
+        this.round.setCurrentPlayer(currentPlayer);
+        return currentPlayer;
     }
 }

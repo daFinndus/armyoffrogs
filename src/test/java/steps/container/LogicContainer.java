@@ -15,7 +15,7 @@ public class LogicContainer {
     public LogicContainer() {
         logic = new Gamelogic();
         round = new Gameround();
-        movement = new Movement();
+        movement = new Movement(this.logic);
 
         System.out.println(getClass().getName());
     }

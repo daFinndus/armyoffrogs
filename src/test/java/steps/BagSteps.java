@@ -21,7 +21,7 @@ public class BagSteps {
     @Angenommen("es läuft kein Spiel")
     public void es_läuft_kein_spiel() {
         container.logic = new Gamelogic();
-        container.logic.bag.setGameRunning(false);
+        container.logic.getBag().setGameRunning(false);
     }
 
     int frösche;

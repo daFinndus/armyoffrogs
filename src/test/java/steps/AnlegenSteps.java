@@ -11,7 +11,8 @@ import io.cucumber.java.de.Wenn;
 
 import steps.container.LogicContainer;
 
-import java.util.List;
+import java.util.*;
+import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
@@ -48,6 +49,8 @@ public class AnlegenSteps {
             default:
                 throw new IllegalArgumentException("Ungültige Reihenfolge: " + order);
         }
+
+        container.logic.setCurrentPlayer(currentPlayer);
     }
 
     @Wenn("der Frosch die eigene Teamfarbe hat")
@@ -70,7 +73,7 @@ public class AnlegenSteps {
     public void dieser_einen_spielstein_anlegen_möchte_der_nicht_der_eigenen_teamfarbe_entspricht() {
         // Simulieren des ausgewählten Frosches
         // Alles außer Color.Blue, da der aktuelle Spieler Color.Blue ist
-        selectedFrog = Color.Red;
+        selectedFrog = container.logic.getFrogsInHand(currentPlayer).get(1);
     }
 
     @Wenn("er einen Frosch hinzufügen möchte")
@@ -84,31 +87,40 @@ public class AnlegenSteps {
     // Das läuft logischerweise auch nur durch, wenn beide Frösche im Vorrat die Teamfarbe haben
     @Dann("müssen alle bereits gelegten Spielsteine und die in seinem Vorrat seine Teamfarbe haben")
     public void müssen_alle_bereits_gelegten_spielsteine_und_die_in_seinem_vorrat_seine_teamfarbe_haben() {
-        // Festlegen vom zweiten Spieler als aktuellen Spieler
-        currentPlayer = container.logic.players()[1];
+        // Simulieren der Frösche in der Hand
+        List<Color> frogsInHand = List.of(currentPlayer, currentPlayer);
 
-        // Simulieren einer Hand voller Frösche der Spielerfarbe
-        Color[] frogColors = {currentPlayer, currentPlayer};
+        // Simulieren eines Frosches auf dem Board
+        Position frogPosition = new Position(Color.Green, 0, 0, Color.None);
+        Set<Position> board = container.logic.getBoard();
+        board.add(frogPosition);
+        container.logic.setBoard(board);
 
-        // Überprüfen ob alle Frösche im Vorrat die Teamfarbe des aktuellen Spielers haben
-        for (int i = 0; i < container.logic.getFrogsInHand(currentPlayer).size(); i++) {
-            Color frogColor = frogColors[i];
-
-            /*
-            // Das hier wurde benutzt, um das Ergebnis zu simulieren
-            frogColor = currentPlayer;
-            */
-
-            assertThat(frogColor).isEqualTo(currentPlayer);
+        // Durchgehen aller Frösche auf dem Board
+        for (Position pos : container.logic.getBoard()) {
+            for (Color color : frogsInHand) {
+                if (pos.frog() != color) {
+                    frogsInHand.add(pos.frog());
+                }
+            }
         }
 
-        System.out.println("Der aktuelle Spieler ist: " + currentPlayer);
+        assertThat(frogsInHand).containsOnly(currentPlayer);
     }
 
     @Dann("darf der Frosch ausschließlich an andersfarbigen Fröschen platziert werden")
     public void darf_der_frosch_ausschließlich_an_andersfarbigen_fröschen_platziert_werden() {
-        // Simulieren eines gelegten Frosches des Spielers davor
-        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), Color.Red);
+        // Erschaffen einer Position mit Frosch anderer Farbe als der Spielerfarbe
+        Position frogPosition = new Position(Color.Red, 0, 0, Color.None);
+        Set<Position> board = container.logic.getBoard();
+        board.add(frogPosition);
+        container.logic.setBoard(board);
+
+        // Simulieren des Vorrats des aktuellen Spielers, ehe er seinen Frosch platziert
+        Map<Color, List<Frog>> frogs = new EnumMap<>(Color.class);
+        List<Frog> playerFrogs = new LinkedList<>(List.of(new Frog(Color.Red, null), new Frog(currentPlayer, null)));
+        frogs.put(currentPlayer, playerFrogs);
+        container.logic.setPlayerFrogs(frogs);
 
         // Simulieren eines gelegten Frosches des aktuellen Spielers
         container.logic.placeFrog(new Position(Color.None, 1, 0, Color.None), currentPlayer);
@@ -119,23 +131,35 @@ public class AnlegenSteps {
         List<Color> frogsInHand = container.logic.getFrogsInHand(currentPlayer);
 
         // Platzieren von einem der beiden Frösche aus dem Vorrat
-        container.logic.placeFrog(new Position(frogsInHand.get(0), 0, 0, Color.None), currentPlayer);
+        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), frogsInHand.get(0));
 
     }
 
     @Dann("muss dieser an alle Spielsteine angelegt werden können")
     public void muss_dieser_an_alle_spielsteine_angelegt_werden_können() {
-        // Simulieren eines gelegten Frosches des Spielers davor
-        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), Color.Red);
+        // Erschaffen einer Position mit Frosch
+        Position frogPosition = new Position(Color.Red, 0, 0, Color.None);
+        Set<Position> board = container.logic.getBoard();
+        board.add(frogPosition);
+        container.logic.setBoard(board);
+
+        // Simulieren des Vorrats des aktuellen Spielers, ehe er seinen Frosch platziert
+        Map<Color, List<Frog>> frogs = new EnumMap<>(Color.class);
+        List<Frog> playerFrogs = new LinkedList<>(List.of(new Frog(Color.Red, null), new Frog(currentPlayer, null)));
+        frogs.put(currentPlayer, playerFrogs);
+        container.logic.setPlayerFrogs(frogs);
 
         // Simulieren eines gelegten Frosches des aktuellen Spielers
-        container.logic.placeFrog(new Position(selectedFrog, 1, 0, Color.None), currentPlayer);
+        container.logic.placeFrog(new Position(Color.None, 1, 0, Color.None), Color.Red);
     }
 
     @Dann("muss bereits ein Frosch auf der Spielfläche liegen der nicht der Teamfarbe entspricht")
     public void muss_bereits_ein_frosch_auf_der_spielfläche_liegen_der_nicht_der_teamfarbe_entspricht() {
-        // Simulieren eines gelegten Frosches des Spielers davor
-        container.logic.placeFrog(new Position(Color.None, 0, 0, Color.None), Color.Red);
+        // Erschaffen einer Position mit Frosch anderer Farbe als der Spielerfarbe
+        Position frogPosition = new Position(Color.Red, 0, 0, Color.None);
+        Set<Position> board = container.logic.getBoard();
+        board.add(frogPosition);
+        container.logic.setBoard(board);
 
         assertThat(container.logic.getBoard().size()).isGreaterThan(0);
 

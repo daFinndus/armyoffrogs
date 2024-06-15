@@ -25,7 +25,7 @@ public class AufbauSteps {
 
     public AufbauSteps(LogicContainer container) {
         this.container = container;
-        bag = container.logic.bag;
+        bag = container.logic.getBag();
         System.out.println(getClass().getName());
     }
 
