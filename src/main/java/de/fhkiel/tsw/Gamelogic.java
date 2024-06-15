@@ -22,7 +22,7 @@ public class Gamelogic implements Game {
     private Map<Color, Color> selectedPlayerFrog = new EnumMap<>(Color.class);
 
     // Das sind die Variablen für das Spielbrett und den Beutel
-    Set<Position> board = new HashSet<>();
+    static Set<Position> board = new HashSet<>();
 
     public Bag bag = new Bag();
     public Gameround round = new Gameround();
@@ -34,7 +34,7 @@ public class Gamelogic implements Game {
     boolean gameStarted = false;
 
     // Die Variable wird genutzt, um den aktuellen Spieler zu speichern
-    public Color currentPlayer;
+    public static Color currentPlayer;
 
     // Die Variablen werden für die Lognachricht und den Logger genutzt
     public static final String LOG_HELPER = ") ausgefuehrt.";
@@ -182,8 +182,22 @@ public class Gamelogic implements Game {
                 throw new IllegalArgumentException("Kein Frosch in der Hand");
             }
 
-            // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
-            placeFrog(position, frog);
+            // Überprüfen, ob die Position einen Frosch enthält
+            boolean frogExists = false;
+            for (Position pos : board) {
+                if (pos.equals(position) && pos.frog() != null) {
+                    frogExists = true;
+                    break;
+                }
+            }
+
+            if (frogExists) {
+                // Wenn die Position einen Frosch enthält, heben Sie ihn hervor
+                Movement.highlightFrog(position);
+            } else {
+                // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
+                placeFrog(position, frog);
+            }
 
             // Beendet den Zug des aktuellen Spielers
             endTurn();

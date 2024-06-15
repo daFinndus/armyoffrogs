@@ -13,7 +13,7 @@ import static de.fhkiel.tsw.Frog.position;
 
 public class Movement extends Gamelogic {
 
-    private Position highlightedPosition;
+    private static Position highlightedPosition;
     /**
      * Die Methode markiert einen Frosch auf dem Spielfeld.
      * Das wird relevant, wenn man zum Beispiel Frösche bewegen möchte.
@@ -21,7 +21,7 @@ public class Movement extends Gamelogic {
      * @param position Die Position des Frosches, der markiert werden soll.
      * @return
      */
-    public Position highlightFrog(Position position) {
+    public static Position highlightFrog(Position position) {
         LOGGER.log(System.Logger.Level.INFO, "highlightFrog(" + position + LOG_HELPER);
 
         Set<Position> newBoard = new HashSet<>();
