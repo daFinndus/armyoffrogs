@@ -40,6 +40,8 @@ public class Gamelogic implements Game {
     public static final String LOG_HELPER = ") ausgefuehrt.";
     public static final System.Logger LOGGER = System.getLogger("Gamelogic");
 
+    public GamePhase currentPhase;
+
     @Override
     public boolean newGame(int spieler) {
         try {
@@ -182,37 +184,47 @@ public class Gamelogic implements Game {
                 throw new IllegalArgumentException("Kein Frosch in der Hand");
             }
 
-            // Überprüfen, ob die Position einen Frosch enthält und ob dieser dem aktuellen Spieler gehört
-            boolean frogExists = false;
-            for (Position pos : board) {
-                if (pos.equals(position) && pos.frog() != null && pos.frog() == currentPlayer) {
-                    frogExists = true;
-                    break;
-                }
-            }
-
-
-            if (frogExists) {
-                // Überprüfen, ob der Frosch bereits hervorgehoben ist
-                Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
-                if (highlightedFrog != null && highlightedFrog.equals(position)) {
-                    // Wenn der Frosch bereits hervorgehoben ist, entfernen Sie das Highlight
-                    Movement.removeHighlight();
-                } else {
-                    // Wenn der Frosch nicht hervorgehoben ist, heben Sie ihn hervor
-                    Movement.highlightFrog(position);
-                }
-            } else {
-                Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
-                if (highlightedFrog != null) {
-                    // Überprüfen, ob die Bewegung gültig ist
-                    if (Movement.isValidMove(highlightedFrog, position)) {
-                        // Bewegen Sie den Frosch
-                        Movement.moveFrog(position);
-                    } else {
-                        throw new IllegalArgumentException("Ungültige Bewegung");
+            switch (currentPhase) {
+                case MOVE_FROG:
+                    // Überprüfen, ob mindestens drei Frösche auf dem Spielfeld sind
+                    if (board.size() < 3) {
+                        throw new IllegalStateException("Es müssen mindestens drei Frösche auf dem Spielfeld sein, bevor ein Spieler einen Frosch bewegen darf");
                     }
-                } else {
+                    // Überprüfen, ob die Position einen Frosch enthält und ob dieser dem aktuellen Spieler gehört
+                    boolean frogExists = false;
+                    for (Position pos : board) {
+                        if (pos.equals(position) && pos.frog() != null && pos.frog() == currentPlayer) {
+                            frogExists = true;
+                            break;
+                        }
+                    }
+
+                    if (frogExists) {
+                        // Überprüfen, ob der Frosch bereits hervorgehoben ist
+                        Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
+                        if (highlightedFrog != null && highlightedFrog.equals(position)) {
+                            // Wenn der Frosch bereits hervorgehoben ist, entfernen Sie das Highlight
+                            Movement.removeHighlight();
+                        } else {
+                            // Wenn der Frosch nicht hervorgehoben ist, heben Sie ihn hervor
+                            Movement.highlightFrog(position);
+                            currentPhase = GamePhase.MOVE_FROG;
+                        }
+                    } else {
+                        Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
+                        if (highlightedFrog != null) {
+                            // Überprüfen, ob die Bewegung gültig ist
+                            if (Movement.isValidMove(highlightedFrog, position)) {
+                                // Bewegen Sie den Frosch
+                                Movement.moveFrog(position);
+                                currentPhase = GamePhase.PLACE_FROG;
+                            } else {
+                                throw new IllegalArgumentException("Ungültige Bewegung");
+                            }
+                        }
+                    }
+                    break;
+                case PLACE_FROG:
                     // Überprüfen, ob das Feld leer ist
                     boolean fieldIsEmpty = true;
                     for (Position pos : board) {
@@ -225,9 +237,17 @@ public class Gamelogic implements Game {
 
                         // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
                         placeFrog(position, frog);
+                        currentPhase = GamePhase.TAKE_FROG_FROM_BAG;
                     }
-                }
+                    break;
+                case TAKE_FROG_FROM_BAG:
+                    addFrogToHand(currentPlayer, bag.takeFrog());
+                    break;
+
+                default:
+                    throw new IllegalStateException("Ungültige Spielphase: " + currentPhase);
             }
+
 
             // Beendet den Zug des aktuellen Spielers
             endTurn();
@@ -321,6 +341,7 @@ public class Gamelogic implements Game {
 
             players = Arrays.copyOfRange(Color.values(), 0, spieler);
             gameStarted = true;
+            currentPhase = GamePhase.PLACE_FROG;
         }
 
         // Reload the frogsInHand for the gui
@@ -360,5 +381,12 @@ public class Gamelogic implements Game {
         selectedPlayerFrog.clear();
         currentPlayer = round.endTurn(currentPlayer, players);
         LOGGER.log(System.Logger.Level.INFO, "Der aktuelle Spieler ist nun: " + currentPlayer);
+
+        // Setzen Sie die Phase auf MOVE_FROG am Ende des Zuges, wenn die Runde größer oder gleich 4 ist
+        if (round.getRound() >= 4 && board.size() >= 3) {
+            currentPhase = GamePhase.MOVE_FROG;
+        } else {
+            currentPhase = GamePhase.PLACE_FROG;
+        }
     }
 }
