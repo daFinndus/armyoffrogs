@@ -182,30 +182,57 @@ public class Gamelogic implements Game {
                 throw new IllegalArgumentException("Kein Frosch in der Hand");
             }
 
-            // Überprüfen, ob die Position einen Frosch enthält
+            // Überprüfen, ob die Position einen Frosch enthält und ob dieser dem aktuellen Spieler gehört
             boolean frogExists = false;
             for (Position pos : board) {
-                if (pos.equals(position) && pos.frog() != null) {
+                if (pos.equals(position) && pos.frog() != null && pos.frog() == currentPlayer) {
                     frogExists = true;
                     break;
                 }
             }
 
+
             if (frogExists) {
-                // Wenn die Position einen Frosch enthält, heben Sie ihn hervor
-                Movement.highlightFrog(position);
+                // Überprüfen, ob der Frosch bereits hervorgehoben ist
+                Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
+                if (highlightedFrog != null && highlightedFrog.equals(position)) {
+                    // Wenn der Frosch bereits hervorgehoben ist, entfernen Sie das Highlight
+                    Movement.removeHighlight();
+                } else {
+                    // Wenn der Frosch nicht hervorgehoben ist, heben Sie ihn hervor
+                    Movement.highlightFrog(position);
+                }
             } else {
-                // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
-                placeFrog(position, frog);
+                Position highlightedFrog = Movement.getHighlight().stream().findFirst().orElse(null);
+                if (highlightedFrog != null) {
+                    // Überprüfen, ob die Bewegung gültig ist
+                    if (Movement.isValidMove(highlightedFrog, position)) {
+                        // Bewegen Sie den Frosch
+                        Movement.moveFrog(position);
+                    } else {
+                        throw new IllegalArgumentException("Ungültige Bewegung");
+                    }
+                } else {
+                    // Überprüfen, ob das Feld leer ist
+                    boolean fieldIsEmpty = true;
+                    for (Position pos : board) {
+                        if (pos.equals(position) && pos.frog() != null) {
+                            fieldIsEmpty = false;
+                            break;
+                        }
+                    }
+                    if (fieldIsEmpty) {
+
+                        // Die Funktion dient dem Platzieren des Frosches auf dem Spielfeld
+                        placeFrog(position, frog);
+                    }
+                }
             }
 
             // Beendet den Zug des aktuellen Spielers
             endTurn();
         }
     }
-
-
-
 
     /**
      * Diese Methode dient dem Platzieren eines Frosches auf dem Spielfeld.

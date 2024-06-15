@@ -1,6 +1,7 @@
 package steps;
 
 import de.fhkiel.tsw.Gamelogic;
+import de.fhkiel.tsw.Movement;
 import de.fhkiel.tsw.armyoffrogs.Color;
 import de.fhkiel.tsw.armyoffrogs.Game;
 import de.fhkiel.tsw.armyoffrogs.Position;
@@ -16,13 +17,10 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BewegungSteps {
-    private LogicContainer container;
+    private LogicContainer container = new LogicContainer();
     private Color currentPlayer;
 
-    public BewegungSteps(LogicContainer container) {
-        this.container = container;
-        System.out.println(getClass().getName());
-    }
+
 
     @Angenommen("der Spieler mit der Teamfarbe {word} ist am Zug")
     public void der_spieler_mit_der_teamfarbe_ist_am_zug(String teamfarbe) {
